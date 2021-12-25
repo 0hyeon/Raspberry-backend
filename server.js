@@ -17,10 +17,45 @@ app.use(bodyParser.json());
 
 // 미들웨어 셋팅
 
+// headers:{
+//   'Content-Type': 'application/x-www-form-urlencoded',
+//   'Accept': 'application/json'}
+// }
+
+
+
+// 선생님이 주신 서버 
+// var allowlist = ['http://localhost:3000'];
+// var corsOptionsDelegate = function (req, callback) {
+//     var corsOptions;
+//     if (allowlist.indexOf(req.header('Origin')) !== -1) {
+//         corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+//     } else {
+//         corsOptions = { origin: false } // disable CORS for this request
+//     }
+//     callback(null, corsOptions) // callback expects two parameters: error and options
+// }
+// app.use(cors(corsOptionsDelegate));
+
+
+// const allowCORS = function (req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+//   res.header('cookie1=value1; SameSite=Lax');
+//   res.header('cookie2=value2; SameSite=None; Secure')
+//   next();
+// }
+// app.use(allowCORS);
+
+
+//내가한 코드 
 app.use(cors({
     origin: true,
     credentials: true
-  }));
+}));
+
+
 app.use('/user_inform', user_inform);
 app.use('/auth', user_inform);
 
