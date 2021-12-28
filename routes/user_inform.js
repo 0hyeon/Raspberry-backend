@@ -9,12 +9,13 @@ const {sign} = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
 //register
 router.post("/", async(req,res)=> {
-    const { user_id, user_email, user_pw } = req.body;
+    const { user_id, user_email, user_pw, user_address } = req.body;
     await bcrypt.hash(user_pw,10).then((hash)=>{
         user_informs.create({
             user_id:user_id,
             user_pw: hash,
             user_email:user_email,
+            user_address:user_address
         });
         
     })
