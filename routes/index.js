@@ -4,6 +4,7 @@ const test = require('./default')
 const user_inform = require('./user_inform')
 const product = require('./product')
 const cart = require('./cart')
+const order = require('./order')
 
 //테스트
 router.use('/test', test)
@@ -16,5 +17,8 @@ router.use('/product', product)
 
 //장바구니관련
 router.use('/cart', cart)
+
+//결제관련 
+router.use('/order', order)
 
 module.exports = router

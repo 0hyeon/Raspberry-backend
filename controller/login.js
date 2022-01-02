@@ -148,8 +148,8 @@ async function main(user_email2,randomPassword2) {
     let info = await transporter.sendMail({
         from: 'djdjdjk2002@gmail.com',
         to: user_email2,
-        subject:'라즈베리에서 임시비밀번호를 알려드립니다1.',
-        text:'라즈베리에서 임시비밀번호를 알려드립니다2.',
+        subject:'라즈베리에서 임시비밀번호를 알려드립니다.',
+        text:'라즈베리에서 임시비밀번호를 알려드립니다.',
         html: 
         "<h1 >라즈베리에서 새로운 비밀번호를 알려드립니다.</h1> <h2> 비밀번호 : " + randomPassword2 + "</h2>"
         +'<h3 style="color: crimson;">임시 비밀번호로 로그인 하신 후, 반드시 비밀번호를 수정해 주세요.</h3>'

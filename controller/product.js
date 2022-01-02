@@ -70,13 +70,12 @@ exports.Updateproducts = async(req, res) => {
             name,description,price,seller,color1,colorName1,size1,quantity1,size1_2,quantity1_2,size1_3,quantity1_3,color2,colorName2,size2,quantity2,size2_2,quantity2_2,size2_3,quantity2_3,color3,colorName3,size3,quantity3,size3_2,quantity3_2,size3_3,quantity3_3,imageUrl,imageUrl2,imageUrl3,imageUrl4,imageUrl5,detailPage,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,
         },{ 
             where : { id:id } 
-        }
-    ).then((result)=>{
-      // console.log("상품 생성결과 :",result);
-        res.send({
-            result,
+        }).then((result)=>{
+        // console.log("상품 생성결과 :",result);
+            res.send({
+                result,
+            })
         })
-    })
     } catch (error) {
         console.log(error);
         res.status(400).send("상품 업로드에 문제가 발생했습니다.");
