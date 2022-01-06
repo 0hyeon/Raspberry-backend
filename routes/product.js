@@ -22,6 +22,9 @@ router.post("/Updateproducts/:id", product.Updateproducts)
 //관리자페이지에서 상품 삭제
 router.post("/AdmdeleteToItem", product.AdmdeleteToItem)
 
+//상품옵션api
+router.post("/productsOptions", product.productsOptions)
+
 
 
 

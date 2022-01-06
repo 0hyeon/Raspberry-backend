@@ -4,7 +4,6 @@ const db = require('../models');
 
 //컨트롤러
 const order = require('../controller/order');
-
 //테스트
 router.get('/' , (req,res) => { res.send('test order'); })
 

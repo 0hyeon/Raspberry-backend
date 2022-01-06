@@ -6,7 +6,7 @@ const {sign} = require('jsonwebtoken');
 //회원가입
 exports.signUp = async(req,res) => {
     try {
-        const { user_id, user_email,user_name, user_pw, user_address,user_phonenumber } = req.body;
+        const { user_id, user_email,user_name, user_pw, user_address,user_address_detail,user_phonenumber } = req.body;
         await bcrypt.hash(user_pw,10).then((hash)=>{
             user_informs.create({
                 user_id:user_id,
@@ -14,6 +14,7 @@ exports.signUp = async(req,res) => {
                 user_name: user_name,
                 user_email:user_email,
                 user_address:user_address,
+                user_address_detail:user_address_detail,
                 user_phonenumber:user_phonenumber
             });
             

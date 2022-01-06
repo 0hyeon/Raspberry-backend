@@ -32,86 +32,6 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(300),
       allowNull: true,
     },
-    size1_2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    quantity1_2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    size1_3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    quantity1_3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    color2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    colorName2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    size2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    quantity2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    size2_2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    quantity2_2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    size2_3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    quantity2_3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    color3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    colorName3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    size3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    quantity3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    size3_2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    quantity3_2: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    size3_3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
-    quantity3_3: {
-      type: DataTypes.STRING(300),
-      allowNull: true,
-    },
     imageUrl: {
       type: DataTypes.STRING(300),
       allowNull: true,
@@ -166,5 +86,18 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: 0,
     }
   });
+  //제품 모델 관계도 
+  // product.associate = (models) => {
+  //   //메모 모델에 외부키를 건다
+  //   //onDelete 옵션의 경우 하나가 삭제되면 외부키가 걸린다.
+
+  //   product.hasMany(models.ProductOption, 
+  //     {as: 'Option', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
+  //     //as : 변수명과 맵핑
+  //     //foreignKey : 해당db에 생길 필드명
+  //     //sourceKey : 복사할필드명
+  //     //onDelete : product의 한줄이 삭제시 option도 모두삭제
+  // }
+
   return product;
 };

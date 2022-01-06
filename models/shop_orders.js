@@ -8,6 +8,18 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(510),
             allowNull: true,
         },
+        name:{
+            type: DataTypes.STRING(510),
+            allowNull: true,
+        },
+        size:{
+            type: DataTypes.STRING(510),
+            allowNull: true,
+        },
+        color:{
+            type: DataTypes.STRING(510),
+            allowNull: true,
+        },
         od_name: {//배송받을 이름
             type: DataTypes.STRING(510),
             allowNull: true,
@@ -67,8 +79,19 @@ module.exports = function (sequelize, DataTypes) {
         od_tno:{//거래번호
             type: DataTypes.STRING(510),
             allowNull: true,
-        }
-
+        },
+        vbank_num:{
+            type: DataTypes.STRING(510),
+            allowNull: true,
+        },
+        vbank_date:{
+            type: DataTypes.STRING(510),
+            allowNull: true,
+        },
+        vbank_name:{
+            type: DataTypes.STRING(510),
+            allowNull: true,
+        },
     });
     return shop_cart;
 };
