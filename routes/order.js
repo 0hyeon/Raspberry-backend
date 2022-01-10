@@ -13,4 +13,7 @@ router.post('/payment', order.payment)
 //결제후 결제완료 db처리
 router.post('/paymentUpdate', order.paymentUpdate)
 
+//결제후 비회원 주문조회 
+router.post('/orderCheck', order.orderCheck)
+
 module.exports = router;

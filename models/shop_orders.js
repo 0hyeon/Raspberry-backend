@@ -8,6 +8,10 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(510),
             allowNull: true,
         },
+        product_option_id:{
+            type: DataTypes.INTEGER(20),
+            allowNull: true,
+        },
         name:{
             type: DataTypes.STRING(510),
             allowNull: true,
@@ -18,6 +22,14 @@ module.exports = function (sequelize, DataTypes) {
         },
         color:{
             type: DataTypes.STRING(510),
+            allowNull: true,
+        },
+        ordernum:{
+            type: DataTypes.INTEGER(20),
+            allowNull: true,
+        },
+        stock:{
+            type: DataTypes.INTEGER(20),
             allowNull: true,
         },
         od_name: {//배송받을 이름
@@ -89,6 +101,10 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true,
         },
         vbank_name:{
+            type: DataTypes.STRING(510),
+            allowNull: true,
+        },
+        pg_tid:{
             type: DataTypes.STRING(510),
             allowNull: true,
         },

@@ -5,7 +5,7 @@ const db = require('../models');
 exports.products = async(req,res) => {
     try {
         db.Product.findAll({//상품정보들 복수개를 조회할때는,
-            order : [["DESC"]],//불러오는 순서
+            order : [["createdAt","DESC"]],//불러오는 순서
             attributes: ["id","name","price","createdAt","seller","color1","colorName1","size1","quantity1","imageUrl","imageUrl2","imageUrl3","imageUrl4","imageUrl5","detailPage","relateProduct1","relateProduct2","relateProduct3","relateProduct4","relateProduct5","soldout"],//이정보들만 받겠다.    
         }).then((result)=>{
             // console.log("PRODUCTS :",result);
@@ -347,13 +347,13 @@ exports.productsOptions = async(req,res) => {
     const {
         productname
     } = body;
-    console.log("req.ProductOption!!!!!!!!!!",productname);
     try {
         
         db.ProductOption.findAll({//상품정보들 복수개를 조회할때는,
             where: {name: productname},
-            order : [["DESC"]],//불러오는 순서
-            attributes: ["id","name","price","seller","color1","colorName1","size1","quantity1"],//이정보들만 받겠다.    
+            // order : [["DESC"]],//불러오는 순서
+            order : [["createdAt","DESC"]],//불러오는 순서
+            attributes: ["id","name","price","seller","color1","colorName1","size1","quantity1","colorType","createdAt"],//이정보들만 받겠다.    
         }).then((result)=>{
             // console.log("PRODUCTS :",result);
             res.send({
