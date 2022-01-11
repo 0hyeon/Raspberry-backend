@@ -61,11 +61,11 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true,
         },
         od_cart_price: {//주문금액
-            type: DataTypes.STRING(510),
+            type: DataTypes.INTEGER(10),
             allowNull: true,
         },
         od_send_cost:{//배송비
-            type: DataTypes.STRING(510),
+            type: DataTypes.INTEGER(10),
             allowNull: true,
         },
         od_bank_account:{//가상계좌번호

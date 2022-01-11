@@ -233,3 +233,48 @@ exports.orderCheck = async(req,res) => {//비회원 주문조회
     }
 
 };
+exports.getOrderResult = async(req,res) => {//회원 주문조회
+    try {
+        const body = req.body;
+        const {
+            mb_id,
+        } = body;
+        
+        await db.shop_orders.findAll({ 
+            raw: true,
+            where: {
+                mb_id
+            }
+        }).then((result)=>{
+            res.send({
+                result,
+            })
+        })
+        // if(!name || !description || !price || !seller || !imageUrl){//방어코드 
+        //     res.status(400).send("모든필드를 입력해주세요");
+        // }
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send("에러발생");
+        // res.status(400).json({"resultCode":-1, "data": null})
+    }
+
+};
+//주문조회에서 해당내역 삭제 
+exports.deleteToCart2 = async(req,res) => {//장바구니
+    try {
+        const { id } = req.body;
+        db.shop_orders.destroy({
+            where: { 
+                id:id 
+            }
+        }).then((result)=>{
+            res.send({
+                result
+            });
+        })    
+    } catch (error) {
+        console.log(error);
+    }
+};

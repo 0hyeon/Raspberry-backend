@@ -15,5 +15,10 @@ router.post('/paymentUpdate', order.paymentUpdate)
 
 //결제후 비회원 주문조회 
 router.post('/orderCheck', order.orderCheck)
+//결제후 회원 주문조회 
+router.post('/getOrderResult', order.getOrderResult)
+
+//주문내역 삭제 
+router.post('/deleteToCart2', order.deleteToCart2)
 
 module.exports = router;

@@ -24,6 +24,10 @@ module.exports = function (sequelize, DataTypes) {
         type :DataTypes.STRING(510),
         allowNull: true,
       },
+      user_address_postzone : {
+        type :DataTypes.STRING(510),
+        allowNull: true,
+      },
       user_phonenumber : {
         type :DataTypes.STRING(510),
         allowNull: true,
