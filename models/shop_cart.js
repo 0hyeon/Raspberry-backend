@@ -16,6 +16,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING(510),
         allowNull: true,
       },
+      it_option_id: {
+        type: DataTypes.STRING(510),
+        allowNull: true,
+      },
       it_name: {
         type: DataTypes.STRING(510),
         allowNull: true,
@@ -37,7 +41,11 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true,
       },
       it_sc_qty : {
-        type :DataTypes.STRING(510),
+        type :DataTypes.INTEGER(50),
+        allowNull: true,
+      },
+      it_sc_stock : {
+        type :DataTypes.INTEGER(50),
         allowNull: true,
       },
       ct_price : {

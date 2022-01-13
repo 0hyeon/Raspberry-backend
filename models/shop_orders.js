@@ -9,7 +9,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true,
         },
         product_option_id:{
-            type: DataTypes.INTEGER(20),
+            type: DataTypes.STRING(510),
             allowNull: true,
         },
         name:{
@@ -25,11 +25,11 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true,
         },
         ordernum:{
-            type: DataTypes.INTEGER(20),
+            type: DataTypes.STRING(510),
             allowNull: true,
         },
         stock:{
-            type: DataTypes.INTEGER(20),
+            type: DataTypes.STRING(510),
             allowNull: true,
         },
         od_name: {//배송받을 이름
@@ -61,11 +61,11 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true,
         },
         od_cart_price: {//주문금액
-            type: DataTypes.INTEGER(10),
+            type: DataTypes.STRING(510),
             allowNull: true,
         },
         od_send_cost:{//배송비
-            type: DataTypes.INTEGER(10),
+            type: DataTypes.STRING(510),
             allowNull: true,
         },
         od_bank_account:{//가상계좌번호

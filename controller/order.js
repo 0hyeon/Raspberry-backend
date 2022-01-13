@@ -3,14 +3,14 @@ const axios = require('axios');
 exports.payment = async(req,res) => {//장바구니
     try {
         const body = req.body;
-        const {od_id,mb_id,product_option_id,name,size,color,ordernum,stock,od_name,od_email,od_tel,od_zip,od_addr1,od_addr2,od_momo,od_cart_price,od_send_cost,od_bank_account,od_receipt_time,od_status,od_hope_data,od_settle_case,
+        const {od_id,mb_id,product_option_id,name,size,color,ordernum,stock,od_name,od_email,od_tel,od_zip,od_addr1,od_addr2,od_memo,od_cart_price,od_send_cost,od_bank_account,od_receipt_time,od_status,od_hope_data,od_settle_case,
         } = body;
         
         // if(!name || !description || !price || !seller || !imageUrl){//방어코드 
         //     res.status(400).send("모든필드를 입력해주세요");
         // }
         db.shop_orders.create({
-            od_id,mb_id,product_option_id,name,size,color,ordernum,stock,od_name,od_email,od_tel,od_zip,od_addr1,od_addr2,od_momo,od_cart_price,od_send_cost,od_bank_account,od_receipt_time,od_status,od_hope_data,od_settle_case,
+            od_id,mb_id,product_option_id,name,size,color,ordernum,stock,od_name,od_email,od_tel,od_zip,od_addr1,od_addr2,od_memo,od_cart_price,od_send_cost,od_bank_account,od_receipt_time,od_status,od_hope_data,od_settle_case,
         }).then((result)=>{
             res.send({
                 result,
@@ -55,7 +55,7 @@ exports.paymentUpdate = async(req, res) => {
         });
         
         const paymentData = getPaymentData.data.response; // 아임포트 서버에서 조회한 결제 정보
-        //console.log('paymentData!!!!!!!!!!!',paymentData);
+        console.log('paymentData!!!!!!!!!!!',paymentData);
         //console.log('paymentData!!!!!!!!!!!',paymentData.name);
 
         // DB에서 결제되어야 하는 금액 조회
@@ -90,8 +90,9 @@ exports.paymentUpdate = async(req, res) => {
                     break;
                 case "paid": // 결제 완료
                     const { name,pg_tid,merchant_uid, custom_data } = paymentData;//name:상품이름 , pg_tid:결제완료표식 , merchant_uid: ,customer_uid : 구입한상품 옵션
-                    
-
+                    const paymentData_name = paymentData.name.split(',');
+                    console.log("paymentData_name[0]",paymentData_name[0]);
+                    console.log("paymentData_name[1]",paymentData_name[1]);
                     //유저 결제정보 업데이트
                     await db.shop_orders.update({
                         pg_tid
@@ -104,19 +105,18 @@ exports.paymentUpdate = async(req, res) => {
                     },{ 
                         where : { od_id:paymentData.merchant_uid } 
                     })
-                    //console.log("custom_data!!!!!!!!!!!!!",custom_data);
-                    const splitResult = custom_data.split(':',2);//3}'
-                    //console.log("splitResult",splitResult);//[ '{"name"', '3}' ]
+                    console.log("custom_data!!!!!!!!!!!!!",custom_data);
+                    //단일결제시 : {"name":"2"}
+                    //다중결제시 : {"name":"1,2"}                    
 
-                    const result1 = splitResult[1]
-
-                    const splitResult2 = result1.split('}');//3}'
-                    const splitResult3 = splitResult2[0]
-                    const updateTargetId = Number(splitResult3);//상품 옵션 id real num 
-                    //필요한것 주문한수량 , 남은상품의 수량 
-                    console.log(updateTargetId);
+                    jsonObj = JSON.parse(custom_data);
+                    console.log("jsonObj : ",jsonObj);
+                    //{ name: '2' }
                     
-                    //유저찾기
+                    const splitResult = jsonObj.name.split(',');
+                    console.log("splitResult : ",splitResult);//'2' , [ '1', '2' ]
+
+                    console.log("splitResult.length",splitResult.length);
 
                     const user_merchant_uid = await db.shop_orders.findAll({ 
                         raw: true,
@@ -124,49 +124,115 @@ exports.paymentUpdate = async(req, res) => {
                             od_id: merchant_uid, 
                         }
                     })
-                    //console.log("user_merchant_uid",user_merchant_uid);
-                    // console.log("user_merchant_uid",[{user_merchant_uid}]);
-                    const [{id,od_id,mb_id,product_option_id,size,color,ordernum,stock}] =user_merchant_uid
-                    //console.log("id,od_id,mb_id,product_option_id,size,color,ordernum",id,od_id,mb_id,product_option_id,size,color,ordernum);
-                    // console.log('user_merchant_uid[0]',user_merchant_uid[0]);//다나옴 
-                    // console.log('user_merchant_uid[0].id',user_merchant_uid[0].id);//user_merchant_uid[0].id 5
-                    // console.log('user_merchant_uid[0].od_id',user_merchant_uid[0].od_id);//user_merchant_uid[0].od_id mid_1641692537007
-                    await db.ProductOption.update({//해당제품의 옵션 재고업데이트 재고 : 기존재고 - 주문수량
-                        quantity1:stock-ordernum,
-                    },{ 
-                        where : { id:updateTargetId } 
-                    }).then(
-                        await db.shop_orders.update({//주문 테이블에 기존재고 리셋 
-                            stock:0
-                        },{ 
-                            where : { od_id : merchant_uid } 
-                        })
-                    ).then(
-                        await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
-                            raw: true,
-                            where: {
-                                name: name, 
-                            }
-                        }).then((result)=>{
-                            // console.log("result!!!!",result)
-                            const quantity1_result = result.map((item)=>item.quantity1)//[ -1, 0 ] 각각 ProductOption 재고량
-                            
-                            const sum1 = quantity1_result.reduce((accumulator, currentNumber) => accumulator + currentNumber);
-                            console.log('sum1 =', sum1);//해당제품 각 옵션 재고의 합
-                            
-                            //모두의 합이 0과 같거나 작다면 해당제품 product soldout 처리
-                            if(sum1 <= 0){
-                                db.Product.update({
-                                    soldout:1
-                                },{ 
-                                    where : { 
-                                        name : name 
-                                    } 
-                                })
-                            }
+                    const [{stock,ordernum}] = user_merchant_uid
+                    console.log('user_merchant_uid',user_merchant_uid);//undefined
+                    console.log('stock',stock);//undefined
+                    console.log('ordernum',ordernum);
 
-                        })
-                    )
+                    const user_stock = stock.split(',');
+                    const user_order = ordernum.split(',');
+                    for(i=0;i<splitResult.length; i++){//splitResult.length만큼 반복 product optionId만큼 (1,2)
+
+                        Number(splitResult[i])//option id 1,2
+
+                        //const [{ordernum,stock}] =user_merchant_uid// [{ordernum:'1,1'} , {stock:'1,1'}]
+                        console.log("ordernum[i]",ordernum[i]);
+                        console.log("stock[i]",stock[i]);
+
+                        console.log(i+1,'번째반복');
+                        await db.ProductOption.update({//해당제품의 옵션 재고업데이트 재고 : 기존재고 - 주문수량 // 두번째 오류 
+                            quantity1:Number(user_stock[i])-Number(user_order[i])//split으로 잘라서 넣어야 
+                        },{ 
+                            where : { id:splitResult[i] } //optionid 각각 1,2의 수량을 
+                        }).then(
+                            await db.shop_orders.update({//주문 테이블에 기존재고 리셋 
+                                stock:0
+                            },{ 
+                                where : { od_id : merchant_uid } 
+                            })
+                        ).then(
+                            await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
+                                raw: true,
+                                where: {
+                                    
+                                    name: paymentData_name[i], //'안전봉투,안전봉투',가당연히 없다. / 안, 
+                                }
+                            }).then((result)=>{
+                                console.log("result",result)
+                                const quantity1_result = result.map((item)=>item.quantity1)//[ -1, 0 ] 각각 ProductOption 재고량
+                                
+                                const sum1 = quantity1_result.reduce((accumulator, currentNumber) => accumulator + currentNumber);
+                                console.log('sum1 =', sum1);//해당제품 각 옵션 재고의 합 
+                                
+                                //모두의 합이 0과 같거나 작다면 해당제품 product soldout 처리
+                                if(sum1 <= 0){
+                                    db.Product.update({
+                                        soldout:1
+                                    },{ 
+                                        where : { 
+                                            // name : name 
+                                            name : paymentData_name[i] 
+                                        } 
+                                    })
+                                }
+                                console.log(n+1,"바퀴돌았음")
+                            })
+                        )
+                    }                    
+                    // const result0= Number(splitResult[0]) //둘다 숫자가뜸
+                    // console.log("result0 : ",result0); // (number) 2
+                    
+
+                    // const updateTargetId = result0;//상품 옵션 id real num 
+                    // //필요한것 주문한수량 , 남은상품의 수량 
+
+                    // console.log(updateTargetId);
+                    // //2
+                    
+                    // //유저찾기
+                    // const user_merchant_uid = await db.shop_orders.findAll({ 
+                    //     raw: true,
+                    //     where: {
+                    //         od_id: merchant_uid, 
+                    //     }
+                    // })
+                    // const [{id,od_id,mb_id,product_option_id,size,color,ordernum,stock}] =user_merchant_uid
+                    // await db.ProductOption.update({//해당제품의 옵션 재고업데이트 재고 : 기존재고 - 주문수량
+                    //     quantity1:stock-ordernum,
+                    // },{ 
+                    //     where : { id:updateTargetId } 
+                    // }).then(
+                    //     await db.shop_orders.update({//주문 테이블에 기존재고 리셋 
+                    //         stock:0
+                    //     },{ 
+                    //         where : { od_id : merchant_uid } 
+                    //     })
+                    // ).then(
+                    //     await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
+                    //         raw: true,
+                    //         where: {
+                    //             name: name, //안전봉투,안전봉투 가당연히 없다.
+                    //         }
+                    //     }).then((result)=>{
+                    //         // console.log("result!!!!",result)
+                    //         const quantity1_result = result.map((item)=>item.quantity1)//[ -1, 0 ] 각각 ProductOption 재고량
+                            
+                    //         const sum1 = quantity1_result.reduce((accumulator, currentNumber) => accumulator + currentNumber);
+                    //         console.log('sum1 =', sum1);//해당제품 각 옵션 재고의 합
+                            
+                    //         //모두의 합이 0과 같거나 작다면 해당제품 product soldout 처리
+                    //         if(sum1 <= 0){
+                    //             db.Product.update({
+                    //                 soldout:1
+                    //             },{ 
+                    //                 where : { 
+                    //                     name : name 
+                    //                 } 
+                    //             })
+                    //         }
+
+                    //     })
+                    // )
 
                     res.send({ status: "success", message: "일반 결제 성공" });
                     // shop_order 테이블에 필드를 추가, 구매한 productOptions id를 update 그리고 

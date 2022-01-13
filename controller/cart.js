@@ -3,7 +3,7 @@ const db = require('../models');
 
 exports.decideToCart = async(req,res) => {
     try {
-        const { productId , seSsionId, price, uploadImage, productName,it_Detail_color,it_Detail_size,it_Detail_quanity } = req.body;
+        const { productId , seSsionId, price, uploadImage, productName,it_Detail_color,it_Detail_size,it_Detail_quanity,it_option_id,it_sc_stock} = req.body;
     
         if(productId == null || seSsionId == null){
             return;
@@ -25,12 +25,15 @@ exports.decideToCart = async(req,res) => {
                 db.shop_cart.create({
                     it_id : productId,
                     mb_id :seSsionId,
+                    it_option_id:it_option_id,
                     it_sc_price:Number(price),
                     thumb_name:uploadImage,
                     it_name:productName,
                     it_Detail_color:it_Detail_color,
                     it_Detail_size:it_Detail_size,
-                    it_Detail_quanity:Number(it_Detail_quanity)
+                    it_Detail_quanity:Number(it_Detail_quanity),
+                    it_sc_stock:Number(it_sc_stock)
+
                 })  
                 res.send({
                     product : result,
