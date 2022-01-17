@@ -14,7 +14,7 @@ router.get('/products', product.products)
 router.get('/products/:id', product.productsId)
 
 //상품등록
-router.post("/products", product.products_post)
+router.post("/products_post", product.products_post)
 
 //상품 업데이트
 router.post("/Updateproducts/:id", product.Updateproducts)

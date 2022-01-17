@@ -32,6 +32,14 @@ module.exports = function (sequelize, DataTypes) {
         type :DataTypes.STRING(510),
         allowNull: true,
       },
+      user_token : {
+        type :DataTypes.STRING(510),
+        allowNull: true,
+      },
+      role : {
+        type :DataTypes.STRING(510),
+        allowNull: true,
+      },
       join_date : {
         type :DataTypes.STRING(510),
         allowNull: true,

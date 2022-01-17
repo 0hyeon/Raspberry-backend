@@ -10,6 +10,14 @@ const nodemailer = require("nodemailer");
 //컨트롤러
 const login = require('../controller/login');
 
+// secretkey
+var dotenv = require('dotenv');
+dotenv.config(); //LOAD CONFIG
+
+// const sequelize = new Sequelize( process.env.LOGIN_SECRET,
+// process.env.DB_USER, process.env.DB_PASSWORD,{
+//     host: process.env.DB_HOST,
+
 //test
 router.get('/' , (req,res) => { res.send('test'); })
 

@@ -2,6 +2,9 @@
 const { user_informs } = require("../models");
 const bcrypt = require("bcrypt");
 const {sign} = require('jsonwebtoken');
+// secretkey
+var dotenv = require('dotenv');
+dotenv.config(); //LOAD CONFIG
 
 //회원가입
 exports.signUp = async(req,res) => {
@@ -31,9 +34,10 @@ exports.signUp = async(req,res) => {
 exports.onLoginData = async (req, res) => {
     try {
         const { session } = req.body;
+        console.log('onLoginData session',session);
         user_informs.findOne({
             where: {
-                'user_id': session,
+                user_id: session,
             },
         }).then((result)=>{
             res.send({
@@ -57,22 +61,29 @@ exports.onLogin =  async (req, res) => {
         // console.log('user.user_pw', user.user_pw);
         
         // if(!user) res.json({ 'msg': '입력하신 id 가 일치하지 않습니다.'});
-        if(!user) res.json({ 'msg': '입력하신 id 가 존재하지 않습니다.'});
-        
+        if(!user) res.json({
+            'loginSuccess': false,
+            'msg': '입력하신 id 가 존재하지 않습니다.'
+        });
+        //user_pw  : react에서보낸값 ,  user.user_pw : db에서 찾은 user의 pw
+        console.log("user_pw",user_pw);
+        console.log("user.user_pw",user.user_pw);
+
         bcrypt.compare(user_pw, user.user_pw).then((match) => {
             if (!match){
                 // res.json({ error: "등록되지않은 유저입니다."});
-                res.json({ 'msg': '비밀번호가 일치하지 않습니다.'})
-            }else{//비밀번호가 맞으면 이거 
-                const accessToken = sign({user_id: user.user_id, id: user.id},"importansecret");
-                console.log('accessToken :',accessToken);
-                console.log('accessToken.user_id : ', accessToken.user_id);
-                console.log('accessToken.id :', accessToken.id);
-                
-                res.cookie("x_auth",accessToken);
-                
-                // res.json(accessToken);
-                res.json({"user_id":user_id,"user_pw":user_pw});
+                res.json({
+                    'loginSuccess': false, 
+                    'msg': '비밀번호가 일치하지 않습니다.'
+                })
+            }
+            else{//비밀번호가 맞으면 이거
+                // const accessToken = sign({user_id},process.env.LOGIN_SECRET)
+                // console.log('accessToken :',accessToken);
+                // console.log('accessToken.user_id : ', accessToken.user_id);
+                // console.log('accessToken.id :', accessToken.id);
+                res.json({'loginSuccess': true,'msg': '로그인 성공', "user_id":user_id});
+
             } 
         })
     } catch (error) {
