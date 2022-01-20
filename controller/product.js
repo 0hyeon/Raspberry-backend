@@ -79,6 +79,8 @@ exports.Updateproducts = async(req, res) => {
         const productOptionPk = await db.Product.findByPk(id);
         //create + as명 (models에서 association에서 적은내용)
         // await productOptionPk.createOption(req.body)
+
+        //다없애고 아래에서 create
         db.ProductOption.destroy({
             where: { 
                 product_id:id 
@@ -88,7 +90,7 @@ exports.Updateproducts = async(req, res) => {
 
         // console.log(id);
         const body = req.body;
-        const {name, description, price, seller, color1, colorName1, size1, quantity1, size1_2, quantity1_2, size1_3, quantity1_3, color2, colorName2, size2, quantity2, size2_2, quantity2_2, size2_3, quantity2_3, color3, colorName3, size3, quantity3, size3_2, quantity3_2, size3_3, quantity3_3, imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5} = body;
+        const {name, description, price, seller, color1, colorName1, size1, quantity1, size1_2, quantity1_2, size1_3, quantity1_3, color2, colorName2, size2, quantity2, size2_2, quantity2_2, size2_3, quantity2_3, color3, colorName3, size3, quantity3, size3_2, quantity3_2, size3_3, quantity3_3, imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,soldout} = body;
         
         if({size1_2:size1_2} == undefined){
             size1_2 == null
@@ -121,21 +123,21 @@ exports.Updateproducts = async(req, res) => {
             await productOptionPk.createOption({
                 name,description,price,seller,
                     color1,colorName1,
-                    size1,quantity1,colorType:"1"
+                    size1,quantity1,colorType:"1",soldout
             })
         }
         if(size1_2 != undefined){
             await productOptionPk.createOption({
                 name,description,price,seller,
                     color1,colorName1,
-                    size1:size1_2,quantity1:quantity1_2,colorType:"1"
+                    size1:size1_2,quantity1:quantity1_2,colorType:"1",soldout
             })
         }
         if(size1_3 != undefined){
             await productOptionPk.createOption({
                 name,description,price,seller,
                     color1,colorName1,
-                    size1:size1_3,quantity1:quantity1_3,colorType:"1"
+                    size1:size1_3,quantity1:quantity1_3,colorType:"1",soldout
             })
         }
         
@@ -145,21 +147,21 @@ exports.Updateproducts = async(req, res) => {
                 await productOptionPk.createOption({
                     name,description,price,seller,
                         color1:color2,colorName1:colorName2,
-                        size1:size2,quantity1:quantity2,colorType:"2"
+                        size1:size2,quantity1:quantity2,colorType:"2",soldout
                 })
             }
             if(size2_2 != undefined){
                 await productOptionPk.createOption({
                     name,description,price,seller,
                         color1:color2,colorName1:colorName2,
-                        size1:size2_2,quantity1:quantity2_2,colorType:"2"
+                        size1:size2_2,quantity1:quantity2_2,colorType:"2",soldout
                 })
             }
             if(size2_3 != undefined){
                 await productOptionPk.createOption({
                     name,description,price,seller,
                         color1:color2,colorName1:colorName2,
-                        size1:size2_3,quantity1:quantity2_3,colorType:"2"
+                        size1:size2_3,quantity1:quantity2_3,colorType:"2",soldout
                 })
             }
         }
@@ -169,21 +171,21 @@ exports.Updateproducts = async(req, res) => {
                 await productOptionPk.createOption({
                     name,description,price,seller,
                         color1:color3,colorName1:colorName3,
-                        size1:size3,quantity1:quantity3,colorType:"3"
+                        size1:size3,quantity1:quantity3,colorType:"3",soldout
                 })
             }
             if(size3_2 != undefined){
                 await productOptionPk.createOption({
                     name,description,price,seller,
                         color1:color3,colorName1:colorName3,
-                        size1:size3_2,quantity1:quantity3_2,colorType:"3"
+                        size1:size3_2,quantity1:quantity3_2,colorType:"3",soldout
                 })
             }
             if(size3_3 != undefined){
                 await productOptionPk.createOption({
                     name,description,price,seller,
                         color1:color3,colorName1:colorName3,
-                        size1:size3_3,quantity1:quantity3_3,colorType:"3"
+                        size1:size3_3,quantity1:quantity3_3,colorType:"3",soldout
                 })
             }
         }

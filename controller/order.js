@@ -161,35 +161,72 @@ exports.paymentUpdate = async(req, res) => {
                             await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
                                 raw: true,
                                 where: {
-                                    product_id: user_it_id[i], //'안전봉투,안전봉투',가당연히 없다. / 안, 
+                                    id: user_opt_id[i], //productopt의 ID
                                 }
                             }).then((result)=>{
-                                console.log("result",result)
-                                const quantity1_result = result.map((item)=>item.quantity1)//[ -1, 0 ] 각각 ProductOption 재고량
-                                
-                                const sum1 = quantity1_result.reduce((accumulator, currentNumber) => accumulator + currentNumber);
-                                console.log('sum1 =', sum1);//해당제품 각 옵션 재고의 합 
-                                
-                                //모두의 합이 0과 같거나 작다면 해당제품 product soldout 처리
-                                if(sum1 <= 0){
-                                    db.Product.update({
-                                        soldout:1
+                                console.log("result!!!",result)
+                                console.log("result!!!",result.quantity1)
+                                const quantity1_result = result.map((item)=>item.quantity1)//ProductOption 재고
+                                console.log("quantity1_result",quantity1_result)
+                                const quantity1_result2 = [quantity1_result]
+
+                                if(quantity1_result2 <= 0){
+                                    db.ProductOption.update({
+                                        soldout:0
                                     },{ 
                                         where : { 
                                             // name : name 
-                                            id : user_it_id[i] 
+                                            id : user_opt_id[i]//productopt의 ID
                                         } 
                                     })
                                 }
+
+                                // const sum1 = quantity1_result.reduce((accumulator, currentNumber) => accumulator + currentNumber);
+                                // console.log('sum1 =', sum1);//해당제품 각 옵션 재고의 합 
                                 
-                            }).then(
-                                await db.shop_cart.destroy({
+                                // //모두의 합이 0과 같거나 작다면 해당제품 product soldout 처리
+                                // if(sum1 <= 0){
+                                //     db.Product.update({
+                                //         soldout:1
+                                //     },{ 
+                                //         where : { 
+                                //             // name : name 
+                                //             id : user_it_id[i] 
+                                //         } 
+                                //     })
+                                // }
+                                
+                            }).then(//db.Productoption의 soldout의 총합이 0
+                                await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
+                                    raw: true,
                                     where: {
-                                        mb_id:order.mb_id,
-                                        it_id:user_it_id[i],
-                                        it_option_id:user_opt_id[i]
+                                        product_id: user_it_id[i], //productopt의 ID
                                     }
-                                })
+                                }).then((result)=>{
+                                    // console.log("result!!!",result)
+                                    // console.log("result!!!",result.quantity1)
+                                    const soldout_result = result.map((item)=>item.soldout)//ProductOption 재고
+                                    const sum1 = soldout_result.reduce((accumulator, currentNumber) => accumulator + currentNumber);
+                                    console.log("sum1",sum1)
+    
+                                    if(sum1 == 0){
+                                        db.Product.update({
+                                            soldout:1
+                                        },{ 
+                                            where : { 
+                                                id : user_it_id[i] 
+                                            } 
+                                        })
+                                    }
+                                }).then(
+                                    await db.shop_cart.destroy({
+                                        where: {
+                                            mb_id:order.mb_id,
+                                            it_id:user_it_id[i],
+                                            it_option_id:user_opt_id[i]
+                                        }
+                                    })
+                                )
                             )
                         )
                     }                    
