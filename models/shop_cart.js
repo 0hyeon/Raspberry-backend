@@ -81,7 +81,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true,
       }
     },{
-      tableName: 'shop_cart'
+      tableName: 'shop_carts'
   });
     return shop_cart;
   };
