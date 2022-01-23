@@ -76,6 +76,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(300),
       allowNull: true,
     },
+    category: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
     productVideo: {
       type: DataTypes.STRING(300),
       allowNull: true,
