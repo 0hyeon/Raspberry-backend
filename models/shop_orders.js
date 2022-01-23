@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    const shop_cart = sequelize.define("shop_orders", {
+    const shop_orders = sequelize.define("shop_orders", {
         od_id: {//거래번호
             type: DataTypes.STRING(510),
             allowNull: true,
@@ -113,5 +113,5 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true,
         },
     });
-    return shop_cart;
+    return shop_orders;
 };

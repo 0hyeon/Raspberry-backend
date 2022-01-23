@@ -80,6 +80,8 @@ module.exports = function (sequelize, DataTypes) {
         type :DataTypes.STRING(510),
         allowNull: true,
       }
-    });
+    },{
+      tableName: 'shop_cart'
+  });
     return shop_cart;
   };
