@@ -73,8 +73,6 @@ const upload = multer({
     limits: {fileSize: 5 * 1024 * 1024}
 })
 
-const upload = mu
-
 const uploadBanner = multer({
     storage: multer.diskStorage({
         destination : function(req,file,cb){
