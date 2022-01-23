@@ -61,7 +61,6 @@ app.use('/v1', Router)//버전
 
 // app.use('/user_inform', user_inform);
 app.use('/auth', user_inform);
-
 const upload = multer({
     storage: multer.diskStorage({
         destination : function(req,file,cb){
@@ -70,9 +69,11 @@ const upload = multer({
         filename: function(req,file,cb){
         cb(null, file.originalname);
         }
-    })
+    }),
+    limits: {fileSize: 5 * 1024 * 1024}
 })
 
+const upload = mu
 
 const uploadBanner = multer({
     storage: multer.diskStorage({
