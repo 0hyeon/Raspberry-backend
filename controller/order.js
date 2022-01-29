@@ -156,8 +156,7 @@ exports.paymentUpdate = async(req, res) => {
                                 stock:0
                             },{ 
                                 where : { od_id : merchant_uid } 
-                            })
-                        ).then(
+                            }),
                             await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
                                 raw: true,
                                 where: {
@@ -167,7 +166,7 @@ exports.paymentUpdate = async(req, res) => {
                                 console.log("result!!!",result)
                                 console.log("result!!!",result.quantity1)
                                 const quantity1_result = result.map((item)=>item.quantity1)//ProductOption 재고
-                                console.log("quantity1_result",quantity1_result)
+                                console.log("quantity1_result",quantity1_result) // [0]
                                 const quantity1_result2 = [quantity1_result]
 
                                 if(quantity1_result2 <= 0){
@@ -180,17 +179,14 @@ exports.paymentUpdate = async(req, res) => {
                                         } 
                                     })
                                 }
-                            }).then(
-                                await db.shop_cart.destroy({
-                                    where: {
-                                        mb_id:order.mb_id,
-                                        it_id:user_it_id[i],
-                                        it_option_id:user_opt_id[i]
-                                    }
-                                })
-                                
-                            )
-                        ).then(
+                            }),
+                            await db.shop_cart.destroy({
+                                where: {
+                                    mb_id:order.mb_id,
+                                    it_id:user_it_id[i],
+                                    it_option_id:user_opt_id[i]
+                                }
+                            }),
                             await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
                                 raw: true,
                                 where: {
@@ -215,7 +211,6 @@ exports.paymentUpdate = async(req, res) => {
                                 }
                             })
                         )
-                
                     }                    
                     //product soldout update
                     res.send({ status: "success", message: "일반 결제 성공" });
