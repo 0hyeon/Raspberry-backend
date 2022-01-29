@@ -78,11 +78,11 @@ exports.onLogin =  async (req, res) => {
                 })
             }
             else{//비밀번호가 맞으면 이거
-                // const accessToken = sign({user_id},process.env.LOGIN_SECRET)
+                const accessToken = sign({user_id},process.env.LOGIN_SECRET)
                 // console.log('accessToken :',accessToken);
                 // console.log('accessToken.user_id : ', accessToken.user_id);
                 // console.log('accessToken.id :', accessToken.id);
-                res.json({'loginSuccess': true,'msg': '로그인 성공', "user_id":user_id});
+                res.json({'loginSuccess': true,'msg': '로그인 성공', "user_id":accessToken});
 
             } 
         })
