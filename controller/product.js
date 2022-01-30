@@ -1,5 +1,5 @@
 const db = require('../models');
-
+const axios = require('axios');
 
 //모든상품조회
 exports.products = async(req,res) => {
@@ -80,10 +80,16 @@ exports.Updateproducts = async(req, res) => {
         //create + as명 (models에서 association에서 적은내용)
         // await productOptionPk.createOption(req.body)
 
-        //다없애고 아래에서 create
+        //update되기때문에 기존  ProductOption 삭제
         db.ProductOption.destroy({
             where: { 
                 product_id:id 
+            }
+        })
+        //update되기때문에 기존 저장된 장바구니 삭제
+        db.shop_cart.destroy({
+            where: { 
+                it_id:id 
             }
         })
         
@@ -274,6 +280,30 @@ exports.productsOptions = async(req,res) => {
     } catch (error) {
         console.log(error);
         res.status(400).send("에러발생");
+        // res.status(400).json({"resultCode":-1, "data": null})
+    }
+}
+//상품Qna
+exports.productQna = async(req,res) => {
+    const body = req.body;
+    const {
+        addresses,
+    } = body;
+
+    // console.log("addresses : ",addresses);
+
+    try {
+        const response = await axios.post(addresses);
+        const {success} = response.data;
+        if(success){
+            return res.json({success:true})
+        }else{
+            return res.json({success:false})
+        }
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({error:"Invalid Captcha. error."})
         // res.status(400).json({"resultCode":-1, "data": null})
     }
 }

@@ -25,6 +25,9 @@ router.post("/AdmdeleteToItem", product.AdmdeleteToItem)
 //상품옵션api
 router.post("/productsOptions", product.productsOptions)
 
+//상품Qna
+router.post("/productQna", product.productQna)
+
 
 
 
