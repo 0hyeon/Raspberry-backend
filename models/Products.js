@@ -97,6 +97,9 @@ module.exports = function (sequelize, DataTypes) {
 
     product.hasMany(models.ProductOption, 
       {as: 'Option', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
+
+    product.hasMany(models.Qna, 
+      {as: 'Qna', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
       //as : 변수명과 맵핑
       //foreignKey : 해당db에 생길 필드명
       //sourceKey : 복사할필드명
