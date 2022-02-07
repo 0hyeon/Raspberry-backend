@@ -92,7 +92,7 @@ exports.qnaComment = async (req,res) => {
     
 };
 
-// 댓글조회
+// 댓글조회(조건)
 exports.qnaAllComent = async (req,res) => {
     try {
         const { id } = req.body;
@@ -109,6 +109,21 @@ exports.qnaAllComent = async (req,res) => {
     } catch (error) {
         console.log(error);
     }
-    
+};
+//모든댓글조회
+exports.qnaAllComentGET = async (req,res) => {
+    try {
+        const { id } = req.body;
+        await db.QnaComent.findAll({
+            order : [["createdAt","DESC"]],//불러오는 순서
+        }).then((result)=>{
+            console.log(result);
+            res.send({
+                result
+            });  
+        });
+    } catch (error) {
+        console.log(error);
+    }
 };
 // 댓글삭제

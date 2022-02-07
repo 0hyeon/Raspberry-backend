@@ -95,11 +95,16 @@ module.exports = function (sequelize, DataTypes) {
     //메모 모델에 외부키를 건다
     //onDelete 옵션의 경우 하나가 삭제되면 외부키가 걸린다.
 
+    //상품옵션
     product.hasMany(models.ProductOption, 
       {as: 'Option', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
-
+    // qna
     product.hasMany(models.Qna, 
       {as: 'Qna', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
+    // qna댓글
+    product.hasMany(models.QnaComent, 
+      {as: 'QnaComent', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
+
       //as : 변수명과 맵핑
       //foreignKey : 해당db에 생길 필드명
       //sourceKey : 복사할필드명

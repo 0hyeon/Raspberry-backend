@@ -19,8 +19,11 @@ router.post('/qnaAnswer', qna.qnaAnswer)
 //댓글작성
 router.post('/qnaComment/:id', qna.qnaComment)
 
-//댓글불러오기
+//댓글불러오기(조건)
 router.post('/qnaAllComent', qna.qnaAllComent)
+
+//댓글불러오기(모든)
+router.get('/qnaAllComentGET', qna.qnaAllComentGET)
 
 //댓글삭제 
 
