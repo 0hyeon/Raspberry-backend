@@ -2,7 +2,7 @@ const db = require('../models');
 //qna register 
 exports.qnaregister = async(req,res) => {
     try {
-        const { user_id,user_name,qna_password,title, description } = req.body;
+        const { user_id,user_name,qna_password,title, description,createDate } = req.body;
         
         // const { seSsionId } = req.body;
 
@@ -11,7 +11,8 @@ exports.qnaregister = async(req,res) => {
             user_name,
             qna_password,
             title,
-            description
+            description,
+            createDate
         }).then((result)=>{
             console.log(result);
             res.send({
@@ -29,7 +30,7 @@ exports.qnaAll = async(req,res) => {
     try {
         db.Qna.findAll({
             order : [["createdAt","DESC"]],//불러오는 순서
-            attributes: ["createdAt","id","product_id","title","user_id","user_name"],
+            attributes: ["createdAt","id","product_id","title","user_id","user_name","createDate"],
         }).then((result)=>{
             console.log(result);
             res.send({
@@ -126,4 +127,64 @@ exports.qnaAllComentGET = async (req,res) => {
         console.log(error);
     }
 };
-// 댓글삭제
+//댓글수정 
+exports.qnaUpdate = async (req,res) => {
+    try {
+        
+        const { id, title, description  } = req.body;
+        db.Qna.update({
+            title, 
+            description
+        },{ 
+            where : { id:id } 
+        }).then((result)=>{
+        // console.log("상품 생성결과 :",result);
+            res.send({
+                result,
+            })
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+// qna삭제
+exports.qnaDelete = async (req,res) => {
+    try {
+        
+        const { id } = req.body;
+        db.Qna.destroy({
+            where: { 
+                id 
+            }
+        }).then((result)=>{
+        // console.log("상품 생성결과 :",result);
+            res.send({
+                result,
+            })
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+// qna댓글삭제
+exports.qnaComentDelete = async (req,res) => {
+    try {
+        
+        const { id } = req.body;
+        db.QnaComent.destroy({
+            where: { 
+                id 
+            }
+        }).then((result)=>{
+        // console.log("상품 생성결과 :",result);
+            res.send({
+                result,
+            })
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+};

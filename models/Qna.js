@@ -19,6 +19,10 @@ module.exports = function (sequelize, DataTypes) {
         description: {
         type: DataTypes.STRING(999),
         allowNull: false,
+        },
+        createDate: {
+        type: DataTypes.STRING(999),
+        allowNull: false,
         }
     },{
         tableName: 'Qna'
