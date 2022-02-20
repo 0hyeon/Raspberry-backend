@@ -2,7 +2,7 @@ const db = require('../models');
 //qna register 
 exports.qnaregister = async(req,res) => {
     try {
-        const { user_id,user_name,qna_password,title, description,createDate } = req.body;
+        const { user_id,user_name,qna_password,title, description,createDate,product_id } = req.body;
         
         // const { seSsionId } = req.body;
 
@@ -12,7 +12,8 @@ exports.qnaregister = async(req,res) => {
             qna_password,
             title,
             description,
-            createDate
+            createDate,
+            product_id
         }).then((result)=>{
             console.log(result);
             res.send({

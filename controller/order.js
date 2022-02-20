@@ -287,6 +287,7 @@ exports.getOrderResult = async(req,res) => {//회원 주문조회
         
         await db.shop_orders.findAll({ 
             raw: true,
+            order : [["createdAt","DESC"]],//불러오는 순서
             where: {
                 mb_id
             }
@@ -319,6 +320,25 @@ exports.deleteToCart2 = async(req,res) => {//장바구니
                 result
             });
         })    
+    } catch (error) {
+        console.log(error);
+    }
+};
+//order table 주소업데이트  
+exports.ModifyAddress = async(req,res) => {//장바구니
+    try {
+        const { od_addr1, od_addr2, od_id } = req.body;
+        await db.shop_orders.update({//유저 가상계좌정보 업데이트
+            
+            od_addr1,
+            od_addr2,
+        },{ 
+            where : { od_id } 
+        }).then((result)=>{
+            res.send({
+                result
+            });
+        })
     } catch (error) {
         console.log(error);
     }

@@ -21,4 +21,7 @@ router.post('/getOrderResult', order.getOrderResult)
 //주문내역 삭제 
 router.post('/deleteToCart2', order.deleteToCart2)
 
+//주문된 주소 재등록 (업데이트)
+router.post('/ModifyAddress', order.ModifyAddress)
+
 module.exports = router;
