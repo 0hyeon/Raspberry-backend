@@ -24,4 +24,13 @@ router.post('/deleteToCart2', order.deleteToCart2)
 //주문된 주소 재등록 (업데이트)
 router.post('/ModifyAddress', order.ModifyAddress)
 
+//결제대기 갯수 (adminpage)
+router.get('/setOrderWait', order.setOrderWait)
+
+//결제완료 갯수 (adminpage)
+router.get('/setOrderSuccess', order.setOrderSuccess)
+
+//송장등록 (adminpage)
+router.post('/ModifySongJang', order.ModifySongJang)
+
 module.exports = router;

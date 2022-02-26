@@ -112,6 +112,10 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(510),
             allowNull: true,
         },
+        od_songjang:{
+            type: DataTypes.STRING(510),
+            allowNull: true,
+        },
     });
     return shop_orders;
 };

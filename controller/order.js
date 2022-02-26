@@ -343,3 +343,53 @@ exports.ModifyAddress = async(req,res) => {//장바구니
         console.log(error);
     }
 };
+//결제대기갯수 (adminPage)
+exports.setOrderWait = async(req,res) => {
+    try {
+        await db.shop_orders.findAll({
+            where: {od_status: "결제대기"},
+            order : [["createdAt","DESC"]],//불러오는 순서
+        }).then((result)=>{
+            res.send({
+                result
+            })
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+//결제완료갯수 (adminPage)
+exports.setOrderSuccess = async(req,res) => {
+    try {
+        await db.shop_orders.findAll({
+            where: {od_status: "결제완료"},
+            order : [["createdAt","DESC"]],//불러오는 순서
+        }).then((result)=>{
+            res.send({
+                result
+            })
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+//송장등록 (adminPage)
+exports.ModifySongJang = async(req,res) => {
+    try {
+        const { od_id,od_songjang } = req.body;
+        await db.shop_orders.update({//유저 가상계좌정보 업데이트
+            od_songjang
+        },{ 
+            where : { od_id } 
+        }).then((result)=>{
+            res.send({
+                result
+            });
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
