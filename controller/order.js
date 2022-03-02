@@ -38,8 +38,10 @@ exports.paymentUpdate = async(req, res) => {
             method: "post", // POST method
             headers: { "Content-Type": "application/json" }, // "Content-Type": "application/json"
             data: {
-                imp_key: "imp_apikey", // REST API 키
-                imp_secret: "ekKoeW8RyKuT0zgaZsUtXXTLQ4AhPFW3ZGseDA6bkA5lamv9OqDMnxyeB9wqOsuO9W3Mx9YSJ4dTqJ3f" 
+                // imp_key: "imp_apikey", // REST API 키
+                // imp_secret: "ekKoeW8RyKuT0zgaZsUtXXTLQ4AhPFW3ZGseDA6bkA5lamv9OqDMnxyeB9wqOsuO9W3Mx9YSJ4dTqJ3f" 
+                imp_key: "5955693315212708", // REST API 키
+                imp_secret: "CP5LAPTaNtIqr3MDA1PRMQF6ZQqhnRxZHCLhsEsf8aGzetcOu2GgSlmRcM8zEGzljkDLZ517gIGubTjF" 
               // REST API Secret
             }
         });

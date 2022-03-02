@@ -6,6 +6,7 @@ const product = require('./product')
 const cart = require('./cart')
 const order = require('./order')
 const qna = require('./qna')
+const webhook = require('./webhook')
 
 //테스트
 router.use('/test', test)
@@ -23,5 +24,8 @@ router.use('/cart', cart)
 router.use('/order', order)
 //Qna
 router.use('/qna', qna)
+
+//가상계좌 webhook (아임포트)
+router.use('/webhook', webhook)
 
 module.exports = router
