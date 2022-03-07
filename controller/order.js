@@ -365,7 +365,22 @@ exports.setOrderWait = async(req,res) => {
 exports.setOrderSuccess = async(req,res) => {
     try {
         await db.shop_orders.findAll({
-            where: {od_status: "결제완료"},
+            where: {od_status: "상품준비중"},
+            order : [["createdAt","DESC"]],//불러오는 순서
+        }).then((result)=>{
+            res.send({
+                result
+            })
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+//all갯수 (adminPage)
+exports.setOrderAll = async(req,res) => {
+    try {
+        await db.shop_orders.findAll({
             order : [["createdAt","DESC"]],//불러오는 순서
         }).then((result)=>{
             res.send({
@@ -382,7 +397,26 @@ exports.ModifySongJang = async(req,res) => {
     try {
         const { od_id,od_songjang } = req.body;
         await db.shop_orders.update({//유저 가상계좌정보 업데이트
-            od_songjang
+            od_songjang,
+            od_status:'출고완료'
+        },{ 
+            where : { od_id } 
+        }).then((result)=>{
+            res.send({
+                result
+            });
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+//결제상태변경api (adminPage)
+exports.ModifyOrderStatus = async(req,res) => {
+    try {
+        const { od_id, od_status } = req.body;
+        await db.shop_orders.update({
+            od_status
         },{ 
             where : { od_id } 
         }).then((result)=>{

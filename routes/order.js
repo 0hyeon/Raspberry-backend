@@ -29,8 +29,13 @@ router.get('/setOrderWait', order.setOrderWait)
 
 //결제완료 갯수 (adminpage)
 router.get('/setOrderSuccess', order.setOrderSuccess)
+//결제완료 갯수 (adminpage)
+router.get('/setOrderAll', order.setOrderAll)
 
 //송장등록 (adminpage)
 router.post('/ModifySongJang', order.ModifySongJang)
+
+//결제상태변경api
+router.post('/ModifyOrderStatus', order.ModifyOrderStatus)
 
 module.exports = router;

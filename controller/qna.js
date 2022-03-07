@@ -13,7 +13,8 @@ exports.qnaregister = async(req,res) => {
             title,
             description,
             createDate,
-            product_id
+            product_id,
+            response_result:'1'
         }).then((result)=>{
             console.log(result);
             res.send({
@@ -31,7 +32,7 @@ exports.qnaAll = async(req,res) => {
     try {
         db.Qna.findAll({
             order : [["createdAt","DESC"]],//불러오는 순서
-            attributes: ["createdAt","id","product_id","title","user_id","user_name","createDate"],
+            attributes: ["createdAt","id","product_id","title","user_id","user_name","createDate","response_result"],
         }).then((result)=>{
             console.log(result);
             res.send({
@@ -42,7 +43,6 @@ exports.qnaAll = async(req,res) => {
     } catch (error) {
         // console.log(error);
     }
-    
 };
 exports.qnaAnswer = async (req,res) => {
     try {
@@ -81,12 +81,30 @@ exports.qnaComment = async (req,res) => {
             user_id,
             user_name, 
             description
-        }).then((result)=>{
+        })
+        .then((result)=>{
             console.log(result);
             res.send({
                 result
             });  
         });
+        
+        if(user_id == 'admin'){
+            await db.Qna.update({
+                response_result:'0' 
+                
+            },{ 
+                where : { id } 
+            })
+
+        }else{
+            await db.Qna.update({
+                response_result:'1' 
+                
+            },{ 
+                where : { id } 
+            })
+        }
 
     } catch (error) {
         console.log(error);
@@ -101,7 +119,7 @@ exports.qnaAllComent = async (req,res) => {
         await db.QnaComent.findAll({
             where: {Qna_id: id},
             // order : [["DESC"]],//불러오는 순서
-            order : [["createdAt","DESC"]],//불러오는 순서
+            order : [["createdAt","ASC"]],//불러오는 순서
         }).then((result)=>{
             console.log(result);
             res.send({
@@ -117,7 +135,7 @@ exports.qnaAllComentGET = async (req,res) => {
     try {
         const { id } = req.body;
         await db.QnaComent.findAll({
-            order : [["createdAt","DESC"]],//불러오는 순서
+            order : [["createdAt","ASC"]],//불러오는 순서
         }).then((result)=>{
             console.log(result);
             res.send({
@@ -188,4 +206,23 @@ exports.qnaComentDelete = async (req,res) => {
     } catch (error) {
         console.log(error);
     }
+};
+// 관리자페이지 비밀번호없이 qna api
+exports.qnaAnswerAdmin = async (req,res) => {
+    try {
+        const { id } = req.body;
+        await db.Qna.findOne({
+            where: { id },
+            // order : [["DESC"]],//불러오는 순서
+            order : [["createdAt","DESC"]],//불러오는 순서
+        }).then((result)=>{
+            console.log(result);
+            res.send({
+                result
+            });  
+        });
+    } catch (error) {
+        console.log(error);
+    }
+    
 };

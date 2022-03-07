@@ -13,7 +13,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING(999),
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     color1: {

@@ -16,6 +16,9 @@ router.get('/qnaAll', qna.qnaAll)
 //비밀번호 입력후 all open
 router.post('/qnaAnswer', qna.qnaAnswer)
 
+//관리자 qnalist 비밀번호 x 입력후 opne
+router.post('/qnaAnswerAdmin', qna.qnaAnswerAdmin)
+
 //댓글작성
 router.post('/qnaComment/:id', qna.qnaComment)
 
@@ -31,6 +34,9 @@ router.post('/qnaComentDelete', qna.qnaComentDelete)
 router.post('/qnaUpdate', qna.qnaUpdate)
 //qna삭제 
 router.post('/qnaDelete', qna.qnaDelete)
+
+//답변해야할 댓글갯수 조회(adminpage)
+// router.get('/commentsLength', qna.commentsLength)
 
 
 module.exports = router;
