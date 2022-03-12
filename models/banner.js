@@ -1,13 +1,16 @@
 module.exports = function(sequelize, dataTypes){
-    const banner = sequelize.define('Banners',{
+    const Banner = sequelize.define('Banner',{
         imageUrl : {
-            type : dataTypes.STRING(300),
+            type : dataTypes.JSON,
             allowNull : false
         },
         href : {
             type : dataTypes.STRING(200),
             allowNull: false,
         },
-    });
-    return banner;
+    },{
+        tableName: 'Banner'
+    }
+    );
+    return Banner;
 }

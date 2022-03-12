@@ -6,6 +6,7 @@ const product = require('./product')
 const cart = require('./cart')
 const order = require('./order')
 const qna = require('./qna')
+const banner = require('./banner')
 
 //테스트
 router.use('/test', test)
@@ -23,6 +24,8 @@ router.use('/cart', cart)
 router.use('/order', order)
 //Qna
 router.use('/qna', qna)
+//banner
+router.use('/banner', banner)
 
 
 module.exports = router
