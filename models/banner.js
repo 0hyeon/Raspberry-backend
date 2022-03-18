@@ -8,6 +8,10 @@ module.exports = function(sequelize, dataTypes){
             type : dataTypes.STRING(200),
             allowNull: false,
         },
+        category : {
+            type : dataTypes.STRING(200),
+            allowNull: false,
+        },
     },{
         tableName: 'Banner'
     }

@@ -38,12 +38,13 @@ exports.setBanner = async(req,res) => {
 };
 exports.inSertBanner = async(req,res) => {
     try {
-        const { imageUrl,href } = req.body;
+        const { imageUrl,href,category } = req.body;
         console.log('req.body :',req.body);
         
         db.Banner.create({
             imageUrl,
-            href
+            href,
+            category
         }).then((result)=>{
             res.send({
                 result
@@ -59,10 +60,8 @@ exports.inSertBanner = async(req,res) => {
 //fetchBanner
 exports.fetchBanner = async(req,res) => {
     try {
-        db.Banner.findOne({
-            where: {
-                id: '1',
-            },
+        db.Banner.findAll({
+            order : [["createdAt","DESC"]],//불러오는 순서
         }).then((result)=>{
             res.send({
                 result
