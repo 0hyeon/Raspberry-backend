@@ -73,3 +73,20 @@ exports.fetchBanner = async(req,res) => {
         res.status(400).send("에러발생");
     }
 };
+
+//배너삭제
+exports.DeleteBanner = async(req,res) => {
+    try {
+        const { category } = req.body;
+        db.Banner.destroy({
+            where: { category }
+        }).then((result)=>{
+            res.send({
+                result
+            });
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(400).send("에러발생");
+    }
+};

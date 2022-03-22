@@ -15,5 +15,7 @@ router.post('/inSertBanner', banner.inSertBanner)
 
 //배너 fetch 조회 
 router.get('/fetchBanner', banner.fetchBanner)
+//배너 삭제 
+router.post('/DeleteBanner', banner.DeleteBanner)
 
 module.exports = router;

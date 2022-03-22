@@ -2,14 +2,34 @@
 const { user_informs } = require("../models");
 const bcrypt = require("bcrypt");
 const {sign} = require('jsonwebtoken');
+
 // secretkey
 var dotenv = require('dotenv');
 dotenv.config(); //LOAD CONFIG
-
 //회원가입
+const aligoapi = require('aligoapi');
+
+var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+var $ = jQuery = require('jquery')(window);
+
 exports.signUp = async(req,res) => {
     try {
         const { user_id, user_email,user_name, user_pw, user_address,user_address_detail,user_address_postzone,user_phonenumber } = req.body;
+        const 회사명 = '라즈베리베리'
+        const msg=`안녕하세요. #{${user_name}}님!
+        #{${회사명}}
+        
+        #{${회사명}}에 회원가입 해주셔서
+        진심으로 감사드립니다~`
+        const subject="회원가입"
+        const tpl_code="P000006"
+
+        alimtalk(user_name, user_phonenumber, msg, subject, tpl_code);
         await bcrypt.hash(user_pw,10).then((hash)=>{
             user_informs.create({
                 user_id:user_id,
@@ -23,11 +43,110 @@ exports.signUp = async(req,res) => {
             });
             
         })
+       
+        
     } catch (error) {
         console.log(error);
         res.status(400).send("상품업로드에 문제가 발생하였습니다.")
         // res.status(400).json({"resultCode":-1, "data": null})
     }
+}
+function alimtalk(mb_name, mb_hp, msg, subject, tpl_code){
+    const apikey = 'ba8omf5kfpdon6e74rz4d130bai7z1xq';
+    const userid = 'djdjdjk2006';
+    const senderkey = 'cd0e3a2b9549589491efae77c9115b9407ff0992';
+    get_token_alimtalk(apikey,userid).then(function (result){
+        // console.log(result);
+        const token = result;
+        get_tpllist_alimtalk(apikey,userid,token,senderkey).then(function (result2){
+            console.log(result2.list[0]);
+            const templtCode = result2.list[0]['templtCode'];
+            send_alimtalk(apikey, userid, token, senderkey, mb_name, mb_hp, msg, subject, templtCode).then(function (result3){
+                console.log(result3);
+            });
+        });
+    });
+}
+
+const get_token_alimtalk=(apikey,userid)=>{
+    return new Promise(function (resolve, reject){
+        $.ajax({
+            type: "POST",
+            url: "https://kakaoapi.aligo.in/akv10/token/create/30/s/",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: 'json',
+            data: {
+                apikey:apikey,
+                userid:userid,
+            },
+            cache: false,
+            success: function (data) {
+                //console.log(data);
+                if(data.code==0){
+                    resolve(data.token);
+                }else{
+                    console.log(data.message);
+                }
+            }
+        })
+    })
+}
+const get_tpllist_alimtalk=(apikey,userid,token,senderkey)=>{
+    return new Promise(function (resolve, reject){
+        $.ajax({
+            type: "POST",
+            url: "https://kakaoapi.aligo.in/akv10/template/list/",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: 'json',
+            data: {
+                apikey:apikey,
+                userid:userid,
+                token:token,
+                senderkey:senderkey,
+            },
+            cache: false,
+            success: function (data) {
+                //console.log(data);
+                if(data.code==0){
+                    resolve(data);
+                }else{
+                    alert(data.message);
+                }
+            }
+        })
+    })
+}
+const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject, tpl_code)=>{
+    return new Promise(function (resolve, reject){
+        $.ajax({
+            type: "POST",
+            url: "https://kakaoapi.aligo.in/akv10/alimtalk/send/",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: 'json',
+            data: {
+                apikey:apikey,
+                userid:userid,
+                token:token,
+                senderkey:senderkey,
+                tpl_code:tpl_code,
+                sender:'010-1234-5678',
+                receiver_1:mb_hp,
+                recvname_1:mb_name,
+                subject_1:subject,
+                message_1:msg,
+                testMode:'Y',
+            },
+            cache: false,
+            success: function (data) {
+                //console.log(data);
+                if(data.code==0){
+                    resolve(data);
+                }else{
+                    alert(data.message);
+                }
+            }
+        })
+    })
 }
 
 //결제전 로그인정보 상태관리 데이터보내기 (setUserSV)

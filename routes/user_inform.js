@@ -9,7 +9,7 @@ const {sign} = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
 //컨트롤러
 const login = require('../controller/login');
-
+const aligoapi = require('aligoapi');
 // secretkey
 var dotenv = require('dotenv');
 dotenv.config(); //LOAD CONFIG
@@ -22,7 +22,7 @@ dotenv.config(); //LOAD CONFIG
 router.get('/' , (req,res) => { res.send('test'); })
 
 //회원가입
-router.post('/', login.signUp)
+router.post('/',login.signUp)
 
 //결제전 로그인정보 상태관리 데이터보내기 (setUserSV)
 router.post('/onLoginData', login.onLoginData)
@@ -65,6 +65,7 @@ router.post('/PassWordEmail', async (req, res) => {
         res.json({ 'msg': '임시비밀번호를 발송하였습니다.'});
     }
 });
+
 
 async function main(user_email2,randomPassword2) {
     // Generate test SMTP service account from ethereal.email
@@ -229,4 +230,8 @@ async function main(user_email2,randomPassword2) {
 //     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 // }
 
+/* 알리고 알림톡 */
+
+
+/* 알리고 알림톡 */
 module.exports = router;
