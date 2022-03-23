@@ -20,12 +20,12 @@ var $ = jQuery = require('jquery')(window);
 exports.signUp = async(req,res) => {
     try {
         const { user_id, user_email,user_name, user_pw, user_address,user_address_detail,user_address_postzone,user_phonenumber } = req.body;
-        const 회사명 = '라즈베리베리'
-        const msg=`안녕하세요. #{${user_name}}님!
-        #{${회사명}}
+        let company = '라즈베리베리'
+        let msg=`안녕하세요. #{${user_name}}님!
+        #{${company}}
         
-        #{${회사명}}에 회원가입 해주셔서
-        진심으로 감사드립니다~`
+        #{${company}}에 회원가입 해주셔서
+        진심으로 감사드립니다~`;
         const subject="회원가입"
         const tpl_code="P000006"
 
@@ -62,7 +62,7 @@ function alimtalk(mb_name, mb_hp, msg, subject, tpl_code){
             console.log(result2.list[0]);
             const templtCode = result2.list[0]['templtCode'];
             send_alimtalk(apikey, userid, token, senderkey, mb_name, mb_hp, msg, subject, templtCode).then(function (result3){
-                console.log(result3);
+                console.log("result3 :",result3);
             });
         });
     });
@@ -84,6 +84,8 @@ const get_token_alimtalk=(apikey,userid)=>{
                 //console.log(data);
                 if(data.code==0){
                     resolve(data.token);
+                    console.log("data.token :",data.token);
+                    console.log("data.token1");
                 }else{
                     console.log(data.message);
                 }
@@ -109,8 +111,9 @@ const get_tpllist_alimtalk=(apikey,userid,token,senderkey)=>{
                 //console.log(data);
                 if(data.code==0){
                     resolve(data);
+                    console.log("data :",data)
                 }else{
-                    alert(data.message);
+                    console.log(data.message);
                 }
             }
         })
@@ -129,7 +132,7 @@ const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject,
                 token:token,
                 senderkey:senderkey,
                 tpl_code:tpl_code,
-                sender:'010-1234-5678',
+                sender:'010-4109-6590',
                 receiver_1:mb_hp,
                 recvname_1:mb_name,
                 subject_1:subject,
@@ -142,7 +145,7 @@ const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject,
                 if(data.code==0){
                     resolve(data);
                 }else{
-                    alert(data.message);
+                    console.log(data.message);
                 }
             }
         })
