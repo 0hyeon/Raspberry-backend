@@ -16,6 +16,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    sizeDesc: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     color1: {
       type: DataTypes.STRING(300),
       allowNull: true,
@@ -52,7 +56,15 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(300),
       allowNull: true,
     },
-    detailPage: {
+    detailPage1: {
+      type: DataTypes.STRING(300),
+      allowNull: true,
+    },
+    detailPage2: {
+      type: DataTypes.STRING(300),
+      allowNull: true,
+    },
+    detailPage3: {
       type: DataTypes.STRING(300),
       allowNull: true,
     },

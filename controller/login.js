@@ -16,20 +16,17 @@ const { document } = (new JSDOM('')).window;
 global.document = document;
 
 var $ = jQuery = require('jquery')(window);
-
+let tpl_code="TI_0549"
 exports.signUp = async(req,res) => {
     try {
         const { user_id, user_email,user_name, user_pw, user_address,user_address_detail,user_address_postzone,user_phonenumber } = req.body;
         let company = '라즈베리베리'
-        let msg=`안녕하세요. #{${user_name}}님!
-        #{${company}}
-        
-        #{${company}}에 회원가입 해주셔서
-        진심으로 감사드립니다~`;
-        const subject="회원가입"
-        const tpl_code="P000006"
+        let msg=`[${company}]
+${user_name}(${user_id})님
 
-        alimtalk(user_name, user_phonenumber, msg, subject, tpl_code);
+${company}에 회원가입 감사합니다.`;
+        let subject="회원가입"
+
         await bcrypt.hash(user_pw,10).then((hash)=>{
             user_informs.create({
                 user_id:user_id,
@@ -42,7 +39,11 @@ exports.signUp = async(req,res) => {
                 user_phonenumber:user_phonenumber
             });
             
-        })
+        }).then(
+            
+            alimtalk(user_name, user_phonenumber, msg, subject, tpl_code)
+
+        )
        
         
     } catch (error) {
@@ -58,6 +59,7 @@ function alimtalk(mb_name, mb_hp, msg, subject, tpl_code){
     get_token_alimtalk(apikey,userid).then(function (result){
         // console.log(result);
         const token = result;
+        // 템플릿이 여러개일 경우 'get_tpllist_alimtalk' 함수의 결과 처리 부분을 수정해야한다. (템플릿 선택 부분 제작 필요)
         get_tpllist_alimtalk(apikey,userid,token,senderkey).then(function (result2){
             console.log(result2.list[0]);
             const templtCode = result2.list[0]['templtCode'];
@@ -85,7 +87,7 @@ const get_token_alimtalk=(apikey,userid)=>{
                 if(data.code==0){
                     resolve(data.token);
                     console.log("data.token :",data.token);
-                    console.log("data.token1");
+                    // console.log("data.token1");
                 }else{
                     console.log(data.message);
                 }
@@ -111,7 +113,7 @@ const get_tpllist_alimtalk=(apikey,userid,token,senderkey)=>{
                 //console.log(data);
                 if(data.code==0){
                     resolve(data);
-                    console.log("data :",data)
+                    // console.log("data :",data)
                 }else{
                     console.log(data.message);
                 }
@@ -137,7 +139,7 @@ const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject,
                 recvname_1:mb_name,
                 subject_1:subject,
                 message_1:msg,
-                testMode:'Y',
+                //testMode:'Y',
             },
             cache: false,
             success: function (data) {

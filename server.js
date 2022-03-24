@@ -339,11 +339,25 @@ app.post('/image5',upload.single('image'),(req,res)=>{//single은 img파일 하�
         imageUrl5 : file.path,
     })
 });
-app.post('/detailPage',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
+app.post('/detailPage1',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
     res.send({
-      detailPage : file.path,
+      detailPage1 : file.path,
+    })
+});
+app.post('/detailPage2',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
+    const file = req.file;//저장된 이미지 정보 
+    console.log(file);
+    res.send({
+      detailPage2 : file.path,
+    })
+});
+app.post('/detailPage3',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
+    const file = req.file;//저장된 이미지 정보 
+    console.log(file);
+    res.send({
+      detailPage3 : file.path,
     })
 });
 // 배너 이미지 업로드 

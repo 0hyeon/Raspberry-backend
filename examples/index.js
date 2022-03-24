@@ -220,10 +220,10 @@ const alimtalkSend = (req, res) => {
   req.body = {
   /*** 필수값입니다 ***/
     senderkey: 'cd0e3a2b9549589491efae77c9115b9407ff0992',
-    tpl_code: 'P000006',
+    // tpl_code: 'TI_0549',
     sender: '01012345678',
     receiver_1: '01041096590',
-    subject_1: 'P000006-회원가입',
+    subject_1: '회원가입',
     message_1: `안녕하세요. #{고객명}님!
     #{회사명}
     
