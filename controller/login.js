@@ -16,9 +16,9 @@ const { document } = (new JSDOM('')).window;
 global.document = document;
 
 var $ = jQuery = require('jquery')(window);
-let tpl_code="TI_0549"
 exports.signUp = async(req,res) => {
     try {
+        let tpl_code="TI_0549"
         const { user_id, user_email,user_name, user_pw, user_address,user_address_detail,user_address_postzone,user_phonenumber } = req.body;
         let company = '라즈베리베리'
         let msg=`[${company}]
@@ -86,7 +86,7 @@ const get_token_alimtalk=(apikey,userid)=>{
                 //console.log(data);
                 if(data.code==0){
                     resolve(data.token);
-                    console.log("data.token :",data.token);
+                    console.log("data.token(login.js) :",data.token);
                     // console.log("data.token1");
                 }else{
                     console.log(data.message);

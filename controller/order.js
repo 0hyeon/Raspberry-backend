@@ -1,6 +1,16 @@
 const db = require('../models');
 const axios = require('axios');
 const dayjs = require('dayjs');
+const aligoapi = require('aligoapi');
+
+var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+var $ = jQuery = require('jquery')(window);
+
+
 exports.payment = async(req,res) => {//장바구니
     try {
         const body = req.body;
@@ -130,7 +140,7 @@ exports.paymentUpdate = async(req, res) => {
                             od_id: merchant_uid, 
                         }
                     })
-                    const [{product_it_id,stock,ordernum,product_option_id}] = user_merchant_uid
+                    const [{product_it_id,stock,ordernum,product_option_id,od_tel,od_addr1,od_cart_price}] = user_merchant_uid
                     console.log('user_merchant_uid',user_merchant_uid);
                     console.log('product_it_id',product_it_id);
                     console.log('product_option_id',product_option_id);
@@ -203,7 +213,19 @@ exports.paymentUpdate = async(req, res) => {
                                 console.log("soldout_result",soldout_result);
                                 const sum1 = soldout_result.reduce((accumulator, currentNumber) => accumulator + currentNumber,0);
                                 console.log("sum1",sum1)
-        
+
+                                let company = '라즈베리베리'
+                                let tpl_code="TI_0937"
+                                let msg=`[${company}]
+구매가 성공적으로 완료되었습니다!
+□ 상품명: ${name}
+□ 주문번호 : ${od_id}
+□ 배송지 : ${od_addr1}
+□ 결제금액 : ${od_cart_price}원
+
+? have a good berry berry!! ?`;
+                                let subject="구매완료"
+                                alimtalk(name, od_tel, msg, subject, tpl_code)
                                 if(sum1 == 0){
                                     db.Product.update({
                                         soldout:1
@@ -416,11 +438,38 @@ exports.ModifySongJang = async(req,res) => {
 //결제상태변경api (adminPage)
 exports.ModifyOrderStatus = async(req,res) => {
     try {
-        const { od_id, od_status } = req.body;
+        const { od_id, od_status,name,od_addr1,od_cart_price,od_tel } = req.body;
+        // 출고완료에서 ModifyOrderStatus 사용할때 파라미터 값을 3개 안보내기 때문에 null 처리
+        if(name ==  undefined ){
+            name == null
+            od_addr1 == null
+            od_cart_price == null
+            od_tel == null
+        }
+      
         await db.shop_orders.update({
             od_status
         },{ 
             where : { od_id } 
+        }).then((result)=>{
+            if( od_status == '상품준비중'){
+                let company = '라즈베리베리'
+                let tpl_code="TI_0936"
+                let msg=`[${company}]
+배송이 시작되었습니다!
+
+□ 상품명: ${name}
+□ 주문번호 : ${od_id}
+□ 배송지 : ${od_addr1}
+□ 결제금액 : ${od_cart_price}원
+                
+? have a good berry berry!! ?`;
+                let subject="배송알림"
+                let button_1=
+                alimtalk(name, od_tel, msg, subject, tpl_code)
+                console.log("카카오알림톡 발송 : ",msg)
+            }
+            
         }).then((result)=>{
             res.send({
                 result
@@ -514,3 +563,154 @@ exports.displayOrderDetail = async(req,res) => {
         console.log(error);
     }
 };
+
+function alimtalk(mb_name, mb_hp, msg, subject, tpl_code){
+    const apikey = 'ba8omf5kfpdon6e74rz4d130bai7z1xq';
+    const userid = 'djdjdjk2006';
+    const senderkey = 'cd0e3a2b9549589491efae77c9115b9407ff0992';
+
+    console.log("functional alimtalk tpl_code :",tpl_code);
+    let templtCode =  tpl_code;
+   
+    get_token_alimtalk(apikey,userid).then(function (result){
+        // console.log(result);
+        const token = result;
+        // 템플릿이 여러개일 경우 'get_tpllist_alimtalk' 함수의 결과 처리 부분을 수정해야한다. (템플릿 선택 부분 제작 필요)
+        get_tpllist_alimtalk(apikey,userid,token,senderkey,tpl_code).then(function (result2){
+            console.log("get_tpllist_alimtalk : ",result2.list[0]);
+
+            // const templtCode = result2.list[0]['templtCode'];
+            send_alimtalk(apikey, userid, token, senderkey, mb_name, mb_hp, msg, subject, templtCode).then(function (result3){
+                console.log("result3 :",result3);
+            });
+        });
+    });
+}
+
+const get_token_alimtalk=(apikey,userid)=>{
+    return new Promise(function (resolve, reject){
+        $.ajax({
+            type: "POST",
+            url: "https://kakaoapi.aligo.in/akv10/token/create/30/s/",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: 'json',
+            data: {
+                apikey:apikey,
+                userid:userid,
+            },
+            cache: false,
+            success: function (data) {
+                //console.log(data);
+                if(data.code==0){
+                    resolve(data.token);
+                    console.log("data.token (order.js) :",data.token);
+                    // console.log("data.token1");
+                }else{
+                    console.log(data.message);
+                }
+            }
+        })
+    })
+}
+const get_tpllist_alimtalk=(apikey,userid,token,senderkey,tpl_code)=>{
+    return new Promise(function (resolve, reject){
+        $.ajax({
+            type: "POST",
+            url: "https://kakaoapi.aligo.in/akv10/template/list/",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: 'json',
+            data: {
+                apikey:apikey,
+                userid:userid,
+                token:token,
+                senderkey:senderkey,
+                tpl_code:tpl_code
+            },
+            cache: false,
+            success: function (data) {
+                //console.log(data);
+                if(data.code==0){
+                    resolve(data);
+                    // console.log("data :",data)
+                }else{
+                    console.log(data.message);
+                }
+            }
+        })
+    })
+}
+const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject, tpl_code)=>{
+    if( tpl_code !== "TI_0936"){
+
+        return new Promise(function (resolve, reject){
+            $.ajax({
+                type: "POST",
+                url: "https://kakaoapi.aligo.in/akv10/alimtalk/send/",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                dataType: 'json',
+                data: {
+                    apikey:apikey,
+                    userid:userid,
+                    token:token,
+                    senderkey:senderkey,
+                    tpl_code:tpl_code,
+                    sender:'010-4109-6590',
+                    receiver_1:mb_hp,
+                    recvname_1:mb_name,
+                    subject_1:subject,
+                    message_1:msg,
+                    //testMode:'Y',
+                },
+                cache: false,
+                success: function (data) {
+                    //console.log(data);
+                    if(data.code==0){
+                        resolve(data);
+                    }else{
+                        console.log(data.message);
+                    }
+                }
+            })
+        })
+        
+    }else{
+
+        return new Promise(function (resolve, reject){
+            $.ajax({
+                type: "POST",
+                url: "https://kakaoapi.aligo.in/akv10/alimtalk/send/",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                dataType: 'json',
+                data: {
+                    apikey:apikey,
+                    userid:userid,
+                    token:token,
+                    senderkey:senderkey,
+                    tpl_code:tpl_code,
+                    sender:'010-4109-6590',
+                    receiver_1:mb_hp,
+                    recvname_1:mb_name,
+                    subject_1:subject,
+                    message_1:msg,
+                    button_1: {
+                        button: [{
+                            "name" : "배송조회",
+                            "linkType" : "DS",
+                            "linkTypeName" : '배송조회',
+                        }]
+                    }
+                    //testMode:'Y',
+                },
+                cache: false,
+                success: function (data) {
+                    //console.log(data);
+                    if(data.code==0){
+                        resolve(data);
+                    }else{
+                        console.log(data.message);
+                    }
+                }
+            })
+        })
+    }
+}
