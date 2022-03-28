@@ -419,16 +419,33 @@ exports.setOrderAll = async(req,res) => {
 //송장등록 (adminPage)
 exports.ModifySongJang = async(req,res) => {
     try {
-        const { od_id,od_songjang } = req.body;
+        const { od_id,od_songjang,name,od_addr1,od_cart_price,od_tel } = req.body;
         await db.shop_orders.update({//유저 가상계좌정보 업데이트
             od_songjang,
             od_status:'출고완료'
         },{ 
             where : { od_id } 
         }).then((result)=>{
+                let company = '라즈베리베리'
+                let tpl_code="TI_1149"
+                let msg=`[${company}]
+${name}  상품배송이 시작되었습니다.
+
+□ 상품명: ${name}
+□ 주문번호 : ${od_id}
+□ 배송지 : ${od_addr1}
+□ 결제금액 : ${od_cart_price}원
+□ 택배사(송장번호 ): ${od_songjang} ${od_songjang}
+                
+? have a good berry berry!! ?`;
+                let subject="배송시작"
+                alimtalk(name, od_tel, msg, subject, tpl_code)
+                console.log("카카오알림톡 발송 : ",msg)
+        }).then((result)=>{
             res.send({
                 result
             });
+            
         })
         
     } catch (error) {
@@ -452,11 +469,11 @@ exports.ModifyOrderStatus = async(req,res) => {
         },{ 
             where : { od_id } 
         }).then((result)=>{
-            if( od_status == '상품준비중'){
+            if( od_status == '상품준비중'){//배송준비
                 let company = '라즈베리베리'
-                let tpl_code="TI_0936"
+                let tpl_code="TI_1148"
                 let msg=`[${company}]
-배송이 시작되었습니다!
+${name} 배송준비중입니다.
 
 □ 상품명: ${name}
 □ 주문번호 : ${od_id}
@@ -464,8 +481,7 @@ exports.ModifyOrderStatus = async(req,res) => {
 □ 결제금액 : ${od_cart_price}원
                 
 ? have a good berry berry!! ?`;
-                let subject="배송알림"
-                let button_1=
+                let subject="배송준비"
                 alimtalk(name, od_tel, msg, subject, tpl_code)
                 console.log("카카오알림톡 발송 : ",msg)
             }
@@ -640,42 +656,9 @@ const get_tpllist_alimtalk=(apikey,userid,token,senderkey,tpl_code)=>{
     })
 }
 const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject, tpl_code)=>{
-    if( tpl_code !== "TI_0936"){
-
+    if( tpl_code == "TI_1149"){//배송 조회 버튼 (배송시작알림)
         return new Promise(function (resolve, reject){
-            $.ajax({
-                type: "POST",
-                url: "https://kakaoapi.aligo.in/akv10/alimtalk/send/",
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                dataType: 'json',
-                data: {
-                    apikey:apikey,
-                    userid:userid,
-                    token:token,
-                    senderkey:senderkey,
-                    tpl_code:tpl_code,
-                    sender:'010-4109-6590',
-                    receiver_1:mb_hp,
-                    recvname_1:mb_name,
-                    subject_1:subject,
-                    message_1:msg,
-                    //testMode:'Y',
-                },
-                cache: false,
-                success: function (data) {
-                    //console.log(data);
-                    if(data.code==0){
-                        resolve(data);
-                    }else{
-                        console.log(data.message);
-                    }
-                }
-            })
-        })
-        
-    }else{
-
-        return new Promise(function (resolve, reject){
+            
             $.ajax({
                 type: "POST",
                 url: "https://kakaoapi.aligo.in/akv10/alimtalk/send/",
@@ -712,5 +695,38 @@ const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject,
                 }
             })
         })
+        
+    }else{
+        return new Promise(function (resolve, reject){
+            $.ajax({
+                type: "POST",
+                url: "https://kakaoapi.aligo.in/akv10/alimtalk/send/",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                dataType: 'json',
+                data: {
+                    apikey:apikey,
+                    userid:userid,
+                    token:token,
+                    senderkey:senderkey,
+                    tpl_code:tpl_code,
+                    sender:'010-4109-6590',
+                    receiver_1:mb_hp,
+                    recvname_1:mb_name,
+                    subject_1:subject,
+                    message_1:msg,
+                    //testMode:'Y',
+                },
+                cache: false,
+                success: function (data) {
+                    //console.log(data);
+                    if(data.code==0){
+                        resolve(data);
+                    }else{
+                        console.log(data.message);
+                    }
+                }
+            })
+        })
+        
     }
 }
