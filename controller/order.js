@@ -428,6 +428,8 @@ exports.ModifySongJang = async(req,res) => {
         }).then((result)=>{
                 let company = '라즈베리베리'
                 let tpl_code="TI_1149"
+                let od_songjang2="334864651561656156"
+
                 let msg=`[${company}]
 ${name}  상품배송이 시작되었습니다.
 
@@ -435,7 +437,7 @@ ${name}  상품배송이 시작되었습니다.
 □ 주문번호 : ${od_id}
 □ 배송지 : ${od_addr1}
 □ 결제금액 : ${od_cart_price}원
-□ 택배사(송장번호 ): ${od_songjang} ${od_songjang}
+□ 택배사(송장번호 ): ${od_songjang} ${od_songjang2}
                 
 ? have a good berry berry!! ?`;
                 let subject="배송시작"
@@ -667,21 +669,23 @@ const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject,
                 data: {
                     apikey:apikey,
                     userid:userid,
-                    token:token,
                     senderkey:senderkey,
+                    token:token,
                     tpl_code:tpl_code,
-                    sender:'010-4109-6590',
                     receiver_1:mb_hp,
+                    sender:'010-4109-6590',
                     recvname_1:mb_name,
                     subject_1:subject,
                     message_1:msg,
-                    button_1: {
-                        button: [{
-                            "name" : "배송조회",
-                            "linkType" : "DS",
-                            "linkTypeName" : '배송조회',
-                        }]
-                    }
+                    button_1: {"button":[{"name":"배송조회","linkType":"DS"}]}
+                    // {
+                    //     "button": [{
+                    //         "name": "배송조회",
+                    //         "linkType": "DS",
+                    //         "linkTypeName": "배송조회",
+                    //     }]
+                    // }
+
                     //testMode:'Y',
                 },
                 cache: false,

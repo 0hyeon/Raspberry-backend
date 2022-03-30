@@ -21,7 +21,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
     },
     color1: {
-      type: DataTypes.STRING(300),
+      type : DataTypes.JSON,
       allowNull: true,
     },
     colorName1: {
@@ -108,12 +108,14 @@ module.exports = function (sequelize, DataTypes) {
     //onDelete 옵션의 경우 하나가 삭제되면 외부키가 걸린다.
 
     //상품옵션
+
+    //ProductOption의 외부키 product_id == products의 id
     product.hasMany(models.ProductOption, 
       {as: 'Option', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
-    // qna
+    // qna의 product_id는  products의 id
     product.hasMany(models.Qna, 
       {as: 'Qna', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
-    // qna댓글
+    // qna댓글 product_id는 products의 id
     product.hasMany(models.QnaComent, 
       {as: 'QnaComent', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
 

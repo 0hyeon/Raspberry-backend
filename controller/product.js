@@ -8,7 +8,7 @@ exports.products = async(req,res) => {
             order : [["createdAt","DESC"]],//불러오는 순서
             attributes: ["id","name","price","createdAt","seller","color1","colorName1","size1","quantity1","imageUrl","imageUrl2","imageUrl3","imageUrl4","imageUrl5","detailPage1","detailPage2","detailPage3","relateProduct1","relateProduct2","relateProduct3","relateProduct4","relateProduct5","category","soldout"],//이정보들만 받겠다.    
         }).then((result)=>{
-            console.log("PRODUCTS :",result);
+            // console.log("PRODUCTS :",result);
             res.send({
                 products:result
             })
@@ -195,12 +195,36 @@ exports.Updateproducts = async(req, res) => {
                 })
             }
         }
+        
+        if(color1 == undefined){
+            color2 == null
+        }
+        if(color2 == undefined){
+            color2 == null
+        }
+        if(color3 == undefined){
+            color3 == null
+        }
+        let colorPackage = []
+        
+        for(let i=1; i<4; i++){
+
+            if(eval('color'+i) == null){
+                continue;
+            }
+            colorPackage.push(eval('color'+i));
+        }
+        console.log("colorPackage",colorPackage);
+        // for(let i =0; i<3; i++) {
+        //     myArray.push(i)
+        // }
+        
         db.Product.update({
-            name,price,seller,description,sizeDesc,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category
+            name,price,seller,description,sizeDesc,color1:colorPackage,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category
         },{ 
             where : { id:id } 
         }).then((result)=>{
-        // console.log("상품 생성결과 :",result);
+        console.log("상품 생성결과 :",result);
             res.send({
                 result,
             })
