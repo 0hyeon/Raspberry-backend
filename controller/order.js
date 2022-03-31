@@ -427,7 +427,7 @@ exports.ModifySongJang = async(req,res) => {
             where : { od_id } 
         }).then((result)=>{
                 let company = '라즈베리베리'
-                let tpl_code="TI_1149"
+                let tpl_code="TI_1516"
                 let od_songjang2="334864651561656156"
 
                 let msg=`[${company}]
@@ -437,10 +437,10 @@ ${name}  상품배송이 시작되었습니다.
 □ 주문번호 : ${od_id}
 □ 배송지 : ${od_addr1}
 □ 결제금액 : ${od_cart_price}원
-□ 택배사(송장번호 ): ${od_songjang} ${od_songjang2}
+□ 택배사(송장번호): ${od_songjang} (클릭시 배송조회)
                 
 ? have a good berry berry!! ?`;
-                let subject="배송시작"
+                let subject="배송버튼"
                 alimtalk(name, od_tel, msg, subject, tpl_code)
                 console.log("카카오알림톡 발송 : ",msg)
         }).then((result)=>{
@@ -658,7 +658,7 @@ const get_tpllist_alimtalk=(apikey,userid,token,senderkey,tpl_code)=>{
     })
 }
 const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject, tpl_code)=>{
-    if( tpl_code == "TI_1149"){//배송 조회 버튼 (배송시작알림)
+    if( tpl_code == "TI_1516"){//배송 조회 버튼 (배송시작알림)
         return new Promise(function (resolve, reject){
             
             $.ajax({
@@ -677,7 +677,7 @@ const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject,
                     recvname_1:mb_name,
                     subject_1:subject,
                     message_1:msg,
-                    button_1: {"button":[{"name":"배송조회","linkType":"DS"}]}
+                    button_1: '{"button": [{"name": "배송조회", "linkType": "DS", "linkTypeName": "배송조회"}]}'
                     // {
                     //     "button": [{
                     //         "name": "배송조회",
