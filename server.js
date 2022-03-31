@@ -8,6 +8,7 @@ const multer = require('multer');
 const logger = require('morgan');
 const Router = require('./routes/index');
 const cookieParser = require('cookie-parser');
+const upload = require('./upload');
 // const bodyParser = require('body-parser');
 
 app.use(logger('dev'));
@@ -71,20 +72,21 @@ app.use('/auth', user_inform);
 //     })
 // })
 
-const storage = multer.diskStorage({
-    destination : function(req,file,cb){
-    cb(null,'uploads/')
-    },
-    filename: function(req,file,cb){
-    cb(null, file.originalname);
-    }
-})
-// const maxSize = 5 * 1024 * 1024
+// const storage = multer.diskStorage({
+//     destination : function(req,file,cb){
+//     cb(null,'uploads/')
+//     },
+//     filename: function(req,file,cb){
+//     cb(null, file.originalname);
+//     }
+// })
+// // const maxSize = 5 * 1024 * 1024
 
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }
-})
+// // 로컬일경우
+// const upload = multer({
+//   storage: storage,
+//   limits: { fileSize: 10 * 1024 * 1024 }
+// })
 
 const uploadBanner = multer({
     storage: multer.diskStorage({
@@ -96,6 +98,8 @@ const uploadBanner = multer({
         }
     })
 })
+
+
 app.use('/uploads',express.static('uploads'));//업로드 경로 설정 
 
 // DB authentication
