@@ -47,7 +47,7 @@ exports.setBanner = async(req,res) => {
 exports.inSertBanner = async(req,res) => {
     try {
         const { imageUrl,href,category } = req.body;
-        console.log('req.body :',req.body);
+        console.log('imageUrl,href,category :',req.body);
         
         db.Banner.create({
             imageUrl,

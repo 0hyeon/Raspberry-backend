@@ -16,7 +16,8 @@ if (env !== "localhost") {//서버일경우
             bucket: 'myapp3.com', 
             acl: 'public-read', 
             key: function(req, file, cb) { 
-                cb(null, Math.floor(Math.random() * 1000).toString() + Date.now() + '.' + file.originalname.split('.').pop()); 
+                // cb(null, Math.floor(Math.random() * 1000).toString() + Date.now() + '.' + file.originalname.split('.').pop()); 
+                cb(null,file.originalname); 
             } 
         }), 
 
