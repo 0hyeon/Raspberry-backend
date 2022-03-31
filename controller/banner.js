@@ -22,6 +22,11 @@ exports.setBanner = async(req,res) => {
             if(err){
                 return req.json({success:false, err })
             }
+            console.log("res :",res);
+            console.log("req :",req);
+            console.log("res.req :",res.req);
+            console.log("res.req.file.path :",res.req.file.path);
+            console.log("path :",path);
             return res.json({ success:true , filePath:res.req.file.path, fileName:res.req.file.filename})
         })
         // const { seSsionId } = req.body;
