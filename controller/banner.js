@@ -25,8 +25,6 @@ exports.setBanner = async(req,res) => {
                 return res.json({success:false, err })
             }
             console.log("setBanner => req.file :",req.file);
-            console.log("setBanner => res :",res);
-            console.log("setBanner => req :",req);
             //로컬일때
             // return res.json({ success:true , filePath:res.req.file.path, fileName:res.req.file.filename})
             //배포모드일때
