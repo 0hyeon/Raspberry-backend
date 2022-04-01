@@ -36,7 +36,7 @@ exports.setBanner = async(req,res) => {
             // console.log("res :",res);
             //로컬일때
             // return res.json({ success:true , filePath:res.req.file.path, fileName:res.req.file.filename})
-            if(env === 'production'){//개발일때
+            if(env !== 'localhost'){//개발일때
                 return res.json({ success:true , filePath:req.file.location, fileName:'file'})    
             }else {//로컬일때
                 return res.json({ success:true , filePath:res.req.file.path, fileName:res.req.file.filename})

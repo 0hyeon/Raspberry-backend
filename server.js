@@ -92,6 +92,9 @@ app.use('/auth', user_inform);
 //   limits: { fileSize: 10 * 1024 * 1024 }
 // })
 
+const config = {
+    header: { 'content-type' : 'multipart/form-data' }
+}
 const uploadBanner = multer({
     storage: multer.diskStorage({
         destination : function(req,file,cb){
@@ -315,90 +318,87 @@ app.get('/banners',(req,res)=> {
 app.post('/image',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
-    if(env === 'production'){//개발일때
+    if(env !== 'localhost'){//개발일때
       return res.json({ imageUrl:file.location})    
     }else {//로컬일때
         return res.json({ imageUrl:file.path})
     }
-});
+})
 app.post('/image2',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
-    if(env === 'production'){//개발일때
+    if(env !== 'localhost'){//개발일때
       return res.json({ imageUrl2:file.location})    
     }else {//로컬일때
         return res.json({ imageUrl2:file.path})
     }
   
-});
+})
 app.post('/image3',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
-    if(env === 'production'){//개발일때
+    if(env !== 'localhost'){//개발일때
       return res.json({ imageUrl3:file.location})    
     }else {//로컬일때
         return res.json({ imageUrl3:file.path})
     }
-});
+})
 app.post('/image4',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
-    if(env === 'production'){//개발일때
+    if(env !== 'localhost'){//개발일때
       return res.json({ imageUrl4:file.location})    
     }else {//로컬일때
         return res.json({ imageUrl4:file.path})
     }
-});
+})
 app.post('/image5',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
-    if(env === 'production'){//개발일때
+    if(env !== 'localhost'){//개발일때
       return res.json({ imageUrl5:file.location})    
     }else {//로컬일때
         return res.json({ imageUrl5:file.path})
     }
-});
+})
 app.post('/detailPage1',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
-    if(env === 'production'){//개발일때
+    if(env !== 'localhost'){//개발일때
       return res.json({ detailPage1:file.location})    
     }else {//로컬일때
         return res.json({ detailPage1:file.path})
     }
-});
+})
 app.post('/detailPage2',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
-    if(env === 'production'){//개발일때
+    if(env !== 'localhost'){//개발일때
       return res.json({ detailPage2:file.location})    
     }else {//로컬일때
         return res.json({ detailPage2:file.path})
     }
     
-});
+})
 app.post('/detailPage3',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
-    if(env === 'production'){//개발일때
+    if(env !== 'localhost'){//개발일때
       return res.json({ detailPage3:file.location})    
     }else {//로컬일때
         return res.json({ detailPage3:file.path})
     }
-});
+})
 // 배너 이미지 업로드 
-// app.post('/imageBanner',uploadBanner.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
-//     const file = req.file;//저장된 이미지 정보 
-//     console.log(file);
-//     res.send({
-//         imageUrl : file.path,
-//     })
-//     if(env === 'production'){//개발일때
-//       return res.json({ detailPage3:file.location})    
-//     }else {//로컬일때
-//         return res.json({ detailPage3:file.path})
-//     }
-// });
+app.post('/imageBanner',uploadBanner.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
+    const file = req.file;//저장된 이미지 정보 
+    console.log(file);
+    if(env !== 'localhost'){//개발일때
+      return res.json({ imageUrl:file.location})    
+    }else {//로컬일때
+        return res.json({ imageUrl:file.path})
+    }
+})
 //get장바구니
 // app.get('/addToCart', async(req,res) => {
 //     // const { seSsionId2 } = req.body;
