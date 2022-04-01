@@ -310,56 +310,64 @@ app.get('/banners',(req,res)=> {
 //multer사용 post 상품업로드 http://localhost:8080/image
 app.post('/image',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
-    console.log(file);
+    console.log("file:",file);
+    console.log("req.file :",req.file);
     res.send({
         imageUrl : file.path,
     })
 });
 app.post('/image2',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
-    console.log(file);
+    console.log("file:",file);
+    console.log("req.file :",req.file);
     res.send({
         imageUrl2 : file.path,
     })
 });
 app.post('/image3',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
-    console.log(file);
+    console.log("file:",file);
+    console.log("req.file :",req.file);
     res.send({
         imageUrl3 : file.path,
     })
 });
 app.post('/image4',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
-    console.log(file);
+    console.log("file:",file);
+    console.log("req.file :",req.file);
     res.send({
         imageUrl4 : file.path,
     })
 });
 app.post('/image5',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
-    console.log(file);
+    console.log("file:",file);
+    console.log("req.file :",req.file);
     res.send({
         imageUrl5 : file.path,
     })
 });
 app.post('/detailPage1',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
-    console.log(file);
+    console.log("file:",file);
+    console.log("req.file :",req.file);
     res.send({
       detailPage1 : file.path,
     })
 });
 app.post('/detailPage2',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
-    console.log(file);
+    console.log("file:",file);
+    console.log("req.file :",req.file);
     res.send({
       detailPage2 : file.path,
     })
 });
 app.post('/detailPage3',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
-    console.log(file);
+    console.log("file:",file);
+    console.log("req.file :",req.file);
     res.send({
       detailPage3 : file.path,
     })
@@ -367,7 +375,8 @@ app.post('/detailPage3',upload.single('image'),(req,res)=>{//single은 img파일
 // 배너 이미지 업로드 
 app.post('/imageBanner',uploadBanner.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
-    console.log(file);
+    console.log("file:",file);
+    console.log("req.file :",req.file);
     res.send({
         imageUrl : file.path,
     })
