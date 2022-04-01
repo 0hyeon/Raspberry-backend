@@ -25,7 +25,7 @@ exports.setBanner = async(req,res) => {
                 return res.json({success:false, err })
             }
 
-            console.log("file:",file);
+            // console.log("file:",file);
             console.log("req.file :",req.file);
             console.log("req :",req);
             console.log("res :",res);

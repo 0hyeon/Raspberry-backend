@@ -14,10 +14,15 @@ if (env !== "localhost") {//서버일경우
         storage: multerS3({ 
             s3: s3, 
             bucket: 'myapp3.com', 
+            contentType: multerS3.AUTO_CONTENT_TYPE, 
+            // contentType: 'image/jpeg', 
             acl: 'public-read', 
+            metadata: function (req, file, cb) {
+                cb(null, { fieldName: file.fieldname }) 
+            },
             key: function(req, file, cb) { 
                 // cb(null, Math.floor(Math.random() * 1000).toString() + Date.now() + '.' + file.originalname.split('.').pop()); 
-                cb(null,file.originalname); 
+                cb(null,`${Date.now()}_${file.originalname}`); 
             } 
         }), 
 

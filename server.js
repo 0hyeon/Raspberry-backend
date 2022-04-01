@@ -10,6 +10,8 @@ const Router = require('./routes/index');
 const cookieParser = require('cookie-parser');
 const upload = require('./upload');
 // const bodyParser = require('body-parser');
+var dotenv = require('dotenv');
+dotenv.config(); //LOAD CONFIG
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -17,6 +19,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 // 미들웨어 셋팅
+const env = process.env.DB_HOST;
 
 // headers:{
 //   'Content-Type': 'application/x-www-form-urlencoded',
@@ -311,75 +314,134 @@ app.get('/banners',(req,res)=> {
 app.post('/image',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log("file:",file);
-    console.log("req.file :",req.file);
-    res.send({
+    
+    if(env == "localhost"){
+      res.send({
         imageUrl : file.path,
-    })
+      })
+    }else{
+      res.send({
+        imageUrl : file.location,
+      })
+    }
+    
 });
 app.post('/image2',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log("file:",file);
-    console.log("req.file :",req.file);
-    res.send({
+    
+    if(env == "localhost"){
+      res.send({
         imageUrl2 : file.path,
-    })
+      })
+    }else{
+      res.send({
+        imageUrl2 : file.location,
+      })
+    }
 });
 app.post('/image3',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log("file:",file);
-    console.log("req.file :",req.file);
-    res.send({
+    
+    if(env == "localhost"){
+      res.send({
         imageUrl3 : file.path,
-    })
+      })
+    }else{
+      res.send({
+        imageUrl3 : file.location,
+      })
+    }
+
 });
 app.post('/image4',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log("file:",file);
-    console.log("req.file :",req.file);
-    res.send({
+    
+   
+    if(env == "localhost"){
+      res.send({
         imageUrl4 : file.path,
-    })
+      })
+    }else{
+      res.send({
+        imageUrl4 : file.location,
+      })
+    }
 });
 app.post('/image5',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log("file:",file);
-    console.log("req.file :",req.file);
-    res.send({
+   
+    if(env == "localhost"){
+      res.send({
         imageUrl5 : file.path,
-    })
+      })
+    }else{
+      res.send({
+        imageUrl5 : file.location,
+      })
+    }
 });
 app.post('/detailPage1',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log("file:",file);
-    console.log("req.file :",req.file);
-    res.send({
-      detailPage1 : file.path,
-    })
+    
+    if(env == "localhost"){
+      res.send({
+        detailPage1 : file.path,
+      })
+    }else{
+      res.send({
+        detailPage1 : file.location,
+      })
+    }
 });
 app.post('/detailPage2',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log("file:",file);
-    console.log("req.file :",req.file);
-    res.send({
-      detailPage2 : file.path,
-    })
+    
+    if(env == "localhost"){
+      res.send({
+        detailPage2 : file.path,
+      })
+    }else{
+      res.send({
+        detailPage2 : file.location,
+      })
+    }
+
 });
 app.post('/detailPage3',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log("file:",file);
-    console.log("req.file :",req.file);
-    res.send({
-      detailPage3 : file.path,
-    })
+    
+    if(env == "localhost"){
+      res.send({
+        detailPage3 : file.path,
+      })
+    }else{
+      res.send({
+        detailPage3 : file.location,
+      })
+    }
 });
 // 배너 이미지 업로드 
 app.post('/imageBanner',uploadBanner.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log("file:",file);
-    console.log("req.file :",req.file);
-    res.send({
+    
+    if(env == "localhost"){
+      res.send({
         imageUrl : file.path,
-    })
+      })
+    }else{
+      res.send({
+        imageUrl : file.location,
+      })
+    }
+    
 });
 //get장바구니
 // app.get('/addToCart', async(req,res) => {
