@@ -1,32 +1,29 @@
 const db = require('../models');
 const multer = require('multer');
-const upload = require('../upload')
-//banner 등록 - admin
-const storage = multer.diskStorage({
-    destination : function(req,file,cb){
-        cb(null,'uploads/')
-    },
-    filename: function(req,file,cb){
-        cb(null, file.originalname);
-    }
-    // filename: function(req,file,cb){
-    //     cb(null,`${Date.now()}_${file.originalname}`);
-    // }
-})
+const upload = require('../upload');
 
-var upload3 = upload.single("file");
+//banner 등록 - admin
+// const storage = multer.diskStorage({
+//     destination : function(req,file,cb){
+//         cb(null,'uploads/')
+//     },
+//     filename: function(req,file,cb){
+//         cb(null, file.originalname);
+//     }
+//     // filename: function(req,file,cb){
+//     //     cb(null,`${Date.now()}_${file.originalname}`);
+//     // }
+// })
+
+// var upload = multer({storage:storage}).single("file")
+var upload2 = upload.single("file")
 
 exports.setBanner = async(req,res) => {
     try {
-        upload3(req, res, err => {
+        upload2(req, res, err => {
             if(err){
-                return req.json({success:false, err })
+                return res.json({success:false, err })
             }
-            console.log("res :",res);
-            console.log("req :",req);
-            console.log("res.req :",res.req);
-            console.log("res.req.file.path :",res.req.file.path);
-            console.log("path :",path);
             return res.json({ success:true , filePath:res.req.file.path, fileName:res.req.file.filename})
         })
         // const { seSsionId } = req.body;
@@ -47,7 +44,7 @@ exports.setBanner = async(req,res) => {
 exports.inSertBanner = async(req,res) => {
     try {
         const { imageUrl,href,category } = req.body;
-        console.log('imageUrl,href,category :',req.body);
+        console.log('req.body :',req.body);
         
         db.Banner.create({
             imageUrl,
