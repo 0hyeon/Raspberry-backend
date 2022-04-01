@@ -1,6 +1,10 @@
 const db = require('../models');
 const multer = require('multer');
 const upload = require('../upload');
+var dotenv = require('dotenv');
+
+dotenv.config(); //LOAD CONFIG
+const env = process.env.DB_HOST;
 
 //banner 등록 - admin
 // const storage = multer.diskStorage({
@@ -24,11 +28,21 @@ exports.setBanner = async(req,res) => {
             if(err){
                 return res.json({success:false, err })
             }
-            console.log("setBanner => req.file :",req.file);
+            // console.log("setBanner => req.file :",req.file);
+
+            console.log("res.req.file.path :",res.req.file.path);//응답해라 요청을한것을 
+            console.log("req.file.path :",req.file.path);//응답해라 요청을한것을 
+            // console.log("set Banner => res.req :",res.req);
+            // console.log("res :",res);
             //로컬일때
             // return res.json({ success:true , filePath:res.req.file.path, fileName:res.req.file.filename})
+            if(env === 'production'){//개발일때
+                return res.json({ success:true , filePath:req.file.location, fileName:'file'})    
+            }else {//로컬일때
+                return res.json({ success:true , filePath:res.req.file.path, fileName:res.req.file.filename})
+            }
             //배포모드일때
-            return res.json({ success:true , filePath:req.file.location, fileName:'file'})
+            //return res.json({ success:true , filePath:req.file.location, fileName:'file'})
         })
         // const { seSsionId } = req.body;
 
