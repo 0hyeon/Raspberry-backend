@@ -311,6 +311,8 @@ app.get('/banners',(req,res)=> {
 app.post('/image',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
     console.log(file);
+    console.log("app.post('/image',upload.single('image') req :",req);
+
     res.send({
         imageUrl : file.path,
     })
