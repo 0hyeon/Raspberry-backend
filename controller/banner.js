@@ -30,8 +30,8 @@ exports.setBanner = async(req,res) => {
             }
             // console.log("setBanner => req.file :",req.file);
 
-            console.log("res.req.file.path :",res.req.file.path);//응답해라 요청을한것을 
             console.log("req.file.path :",req.file.path);//응답해라 요청을한것을 
+            // console.log("req.file.path :",req.file.path);//응답해라 요청을한것을 
             // console.log("set Banner => res.req :",res.req);
             // console.log("res :",res);
             //로컬일때
