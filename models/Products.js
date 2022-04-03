@@ -68,6 +68,14 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(300),
       allowNull: true,
     },
+    detailPage4: {
+      type: DataTypes.STRING(300),
+      allowNull: true,
+    },
+    detailPage5: {
+      type: DataTypes.STRING(300),
+      allowNull: true,
+    },
     relateProduct1: {
       type: DataTypes.STRING(300),
       allowNull: true,

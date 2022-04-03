@@ -389,6 +389,24 @@ app.post('/detailPage3',upload.single('image'),(req,res)=>{//single은 img파일
         return res.json({ detailPage3:file.path})
     }
 })
+app.post('/detailPage4',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
+    const file = req.file;//저장된 이미지 정보 
+    console.log(file);
+    if(env !== 'localhost'){//개발일때
+      return res.json({ detailPage4:file.location})    
+    }else {//로컬일때
+        return res.json({ detailPage4:file.path})
+    }
+})
+app.post('/detailPage5',upload.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
+    const file = req.file;//저장된 이미지 정보 
+    console.log(file);
+    if(env !== 'localhost'){//개발일때
+      return res.json({ detailPage5:file.location})    
+    }else {//로컬일때
+        return res.json({ detailPage5:file.path})
+    }
+})
 // 배너 이미지 업로드 
 app.post('/imageBanner',uploadBanner.single('image'),(req,res)=>{//single은 img파일 하나만 보냈을때
     const file = req.file;//저장된 이미지 정보 
