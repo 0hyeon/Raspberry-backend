@@ -10,7 +10,9 @@ dotenv.config(); //LOAD CONFIG
 const env = process.env.DB_HOST;
 const maxSize = 30 * 1024 * 1024; //최대 2MB로 제한
 if (env !== "localhost") {//서버일경우
-    const upload = multer({ 
+    let upload = multer({ 
+        limits: { files:1,fileSize: 15 * 1024 * 1024 },
+
         storage: multerS3({ 
             s3: s3, 
             bucket: 'myapp3.com', 
@@ -27,17 +29,13 @@ if (env !== "localhost") {//서버일경우
                         .toFormat("jpeg", { mozjpeg: true })
                 );
             },
-            limits: { 
-                fileSize: maxSize
-            } 
         }), 
-
     }); 
     console.log("development upload")
     module.exports = upload;    
 }else {
     // 로컬일경우 
-    const storage = multer.diskStorage({
+    let storage = multer.diskStorage({
         destination : function(req,file,cb){
         cb(null,'uploads/')
         },
@@ -48,9 +46,9 @@ if (env !== "localhost") {//서버일경우
     // const maxSize = 5 * 1024 * 1024
     
     // 로컬일경우
-    const upload = multer({
+    let upload = multer({
       storage: storage,
-      limits: { fileSize: 15 * 1024 * 1024 }
+      limits: { fileSize: 30 * 1024 * 1024 }
     })
     console.log("localhost upload")
     module.exports = upload;
