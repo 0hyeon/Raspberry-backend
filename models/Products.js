@@ -25,11 +25,11 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
     },
     colorName1: {
-      type: DataTypes.STRING(300),
+      type : DataTypes.JSON,
       allowNull: true,
     },
     size1: {
-      type: DataTypes.STRING(300),
+      type : DataTypes.JSON,
       allowNull: true,
     },
     quantity1: {

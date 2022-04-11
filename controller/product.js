@@ -206,21 +206,45 @@ exports.Updateproducts = async(req, res) => {
             color3 == null
         }
         let colorPackage = []
+        let colorNamePackage = []
+        let SizePackage = []
         
+        //colorPackage
         for(let i=1; i<4; i++){
-
             if(eval('color'+i) == null){
                 continue;
             }
             colorPackage.push(eval('color'+i));
         }
         console.log("colorPackage",colorPackage);
-        // for(let i =0; i<3; i++) {
-        //     myArray.push(i)
-        // }
+
+        //colorNamePackage
+        for(let i=1; i<4; i++){
+            // if(eval('colorName'+i) == null){
+            //     eval('colorName'+i) == null;
+            // }
+            colorNamePackage.push(eval('colorName'+i));
+        }
+        console.log("colorNamePackage",colorNamePackage);
+        //SizePackage
+        for(let i=1; i<4; i++){
+            // if(eval('size'+i) == null){
+            //     console.log('null');
+            // }//사이즈 첫번째꺼가 있으면 
+                
+                SizePackage.push(eval('size'+i));
+                for(let j=2; j<4; j++){
+                    // if(eval('size'+i+'_'+j) == null){
+                    //     continue;
+                    // }
+                    SizePackage.push(eval('size'+i+'_'+j));
+                }
+        }
+        console.log("SizePackage",SizePackage);
+
         
         db.Product.update({
-            name,price,seller,description,sizeDesc,color1:colorPackage,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category
+            name,price,seller,description,sizeDesc,color1:colorPackage,colorName1:colorNamePackage,size1:SizePackage,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category
         },{ 
             where : { id:id } 
         }).then((result)=>{
