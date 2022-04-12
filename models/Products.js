@@ -33,7 +33,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
     },
     quantity1: {
-      type: DataTypes.STRING(300),
+      type : DataTypes.JSON,
       allowNull: true,
     },
     imageUrl: {

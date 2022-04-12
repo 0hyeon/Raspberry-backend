@@ -6,7 +6,7 @@ exports.products = async(req,res) => {
     try {
         db.Product.findAll({//상품정보들 복수개를 조회할때는,
             order : [["createdAt","DESC"]],//불러오는 순서
-            attributes: ["id","name","price","createdAt","seller","color1","colorName1","size1","quantity1","imageUrl","imageUrl2","imageUrl3","imageUrl4","imageUrl5","detailPage1","detailPage2","detailPage3","detailPage4","detailPage5","relateProduct1","relateProduct2","relateProduct3","relateProduct4","relateProduct5","category","soldout"],//이정보들만 받겠다.    
+            attributes: ["id","name","price","description","sizeDesc","createdAt","seller","color1","colorName1","size1","quantity1","imageUrl","imageUrl2","imageUrl3","imageUrl4","imageUrl5","detailPage1","detailPage2","detailPage3","detailPage4","detailPage5","relateProduct1","relateProduct2","relateProduct3","relateProduct4","relateProduct5","category","soldout"],//이정보들만 받겠다.    
         }).then((result)=>{
             // console.log("PRODUCTS :",result);
             res.send({
@@ -97,7 +97,7 @@ exports.Updateproducts = async(req, res) => {
         // console.log(id);
         const body = req.body;
         const {name, description,sizeDesc, price, seller, color1, colorName1, size1, quantity1, size1_2, quantity1_2, size1_3, quantity1_3, color2, colorName2, size2, quantity2, size2_2, quantity2_2, size2_3, quantity2_3, color3, colorName3, size3, quantity3, size3_2, quantity3_2, size3_3, quantity3_3, imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category,soldout} = body;
-        
+        console.log("!!!!!colorName1 : ",colorName1);
         if({size1_2:size1_2} == undefined){
             size1_2 == null
         }
@@ -208,7 +208,7 @@ exports.Updateproducts = async(req, res) => {
         let colorPackage = []
         let colorNamePackage = []
         let SizePackage = []
-        
+        let QuantityPackage = []
         //colorPackage
         for(let i=1; i<4; i++){
             if(eval('color'+i) == null){
@@ -241,10 +241,25 @@ exports.Updateproducts = async(req, res) => {
                 }
         }
         console.log("SizePackage",SizePackage);
+        //QuantityPackage 상품재고 패키지
+        for(let i=1; i<4; i++){
+            // if(eval('size'+i) == null){
+            //     console.log('null');
+            // }//사이즈 첫번째꺼가 있으면 
+                
+            QuantityPackage.push(eval('quantity'+i));
+                for(let j=2; j<4; j++){
+                    // if(eval('size'+i+'_'+j) == null){
+                    //     continue;
+                    // }
+                    QuantityPackage.push(eval('quantity'+i+'_'+j));
+                }
+        }
+        console.log("QuantityPackage",QuantityPackage);
 
         
         db.Product.update({
-            name,price,seller,description,sizeDesc,color1:colorPackage,colorName1:colorNamePackage,size1:SizePackage,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category
+            name,price,seller,description,sizeDesc,color1:colorPackage,colorName1:colorNamePackage,size1:SizePackage,quantity1:QuantityPackage,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category
         },{ 
             where : { id:id } 
         }).then((result)=>{
