@@ -16,6 +16,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    subDescription:{
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     sizeDesc: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -126,11 +130,14 @@ module.exports = function (sequelize, DataTypes) {
     // qna댓글 product_id는 products의 id
     product.hasMany(models.QnaComent, 
       {as: 'QnaComent', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
-
       //as : 변수명과 맵핑
       //foreignKey : 해당db에 생길 필드명
       //sourceKey : 복사할필드명
       //onDelete : product의 한줄이 삭제시 option도 모두삭제
+
+      // const productOptionPk = await db.Product.findByPk(id);
+      //create + as명 (models에서 association에서 적은내용)
+      // await productOptionPk.createOption(req.body)
   }
 
   return product;

@@ -8,6 +8,7 @@ const order = require('./order')
 const qna = require('./qna')
 const banner = require('./banner')
 const kakaoalert = require('./kakaoalert')
+const review = require('./review')
 
 //테스트
 router.use('/test', test)
@@ -27,6 +28,8 @@ router.use('/order', order)
 router.use('/qna', qna)
 //banner
 router.use('/banner', banner)
+//reivew
+router.use('/review', review)
 
 router.use('/kakaoalert', kakaoalert)
 

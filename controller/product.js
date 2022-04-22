@@ -6,7 +6,7 @@ exports.products = async(req,res) => {
     try {
         db.Product.findAll({//상품정보들 복수개를 조회할때는,
             order : [["createdAt","DESC"]],//불러오는 순서
-            attributes: ["id","name","price","description","sizeDesc","createdAt","seller","color1","colorName1","size1","quantity1","imageUrl","imageUrl2","imageUrl3","imageUrl4","imageUrl5","detailPage1","detailPage2","detailPage3","detailPage4","detailPage5","relateProduct1","relateProduct2","relateProduct3","relateProduct4","relateProduct5","category","soldout"],//이정보들만 받겠다.    
+            attributes: ["id","name","price","description","subDescription","sizeDesc","createdAt","seller","color1","colorName1","size1","quantity1","imageUrl","imageUrl2","imageUrl3","imageUrl4","imageUrl5","detailPage1","detailPage2","detailPage3","detailPage4","detailPage5","relateProduct1","relateProduct2","relateProduct3","relateProduct4","relateProduct5","category","soldout"],//이정보들만 받겠다.    
         }).then((result)=>{
             // console.log("PRODUCTS :",result);
             res.send({
@@ -25,7 +25,7 @@ exports.products_post = (req,res) => {
     try {
         console.log("상품등록 req.body",req);
         
-        const {name, description, price, seller,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5, sizeDesc} = req.body;
+        const {name, description,subDescription, price, seller,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5, sizeDesc} = req.body;
 
         // // if(!name || !description || !price ||  !imageUrl){//방어코드 
         // //     res.status(400).send("입력안한값이 있습니다.");
@@ -37,8 +37,7 @@ exports.products_post = (req,res) => {
         // // console.log("datas!!!!",datas);
         // //product 한개만 생성 
         db.Product.create({
-            name,price,seller,description,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1,detailPage2,detailPage3,detailPage4,detailPage5,sizeDesc
-                
+            name,price,seller,description,subDescription,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1,detailPage2,detailPage3,detailPage4,detailPage5,sizeDesc
         })
         .then((result)=>{
             res.send({
@@ -326,11 +325,11 @@ exports.AdmdeleteToItem = async(req,res) => {//장바구니
 exports.productsOptions = async(req,res) => {
     const body = req.body;
     const {
-        productname
+        product_id
     } = body;
     try {
         db.ProductOption.findAll({//상품정보들 복수개를 조회할때는,
-            where: {name: productname},
+            where: {product_id: product_id},
             // order : [["DESC"]],//불러오는 순서
             order : [["createdAt","DESC"]],//불러오는 순서
             attributes: ["id","name","price","seller","color1","colorName1","size1","quantity1","colorType","createdAt"],//이정보들만 받겠다.    
