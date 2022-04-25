@@ -52,8 +52,8 @@ module.exports = function(sequelize, DataTypes){
         //상품옵션
     
         //ProductOption의 외부키 product_id == products의 id
-        ProductOption.hasMany(models.review, 
-          {as: 'Review', foreignKey: 'product_option_id', sourceKey: 'id' , onDelete: 'CASCADE'});
+        // ProductOption.hasMany(models.review, 
+        //   {as: 'Review', foreignKey: 'product_option_id', sourceKey: 'id' , onDelete: 'CASCADE'});
         // qna의 product_id는  products의 id
      
           //as : 변수명과 맵핑

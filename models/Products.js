@@ -130,6 +130,9 @@ module.exports = function (sequelize, DataTypes) {
     // qna댓글 product_id는 products의 id
     product.hasMany(models.QnaComent, 
       {as: 'QnaComent', foreignKey: 'product_id', sourceKey: 'id' , onDelete: 'CASCADE'});
+
+    product.hasMany(models.review, 
+      {as: 'ReviewCreate', foreignKey: 'product_option_id', sourceKey: 'id' , onDelete: 'CASCADE'});
       //as : 변수명과 맵핑
       //foreignKey : 해당db에 생길 필드명
       //sourceKey : 복사할필드명
