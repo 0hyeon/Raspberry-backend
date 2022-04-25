@@ -79,7 +79,7 @@ async function main(user_email2,randomPassword2) {
         secure: true, // true for 465, false for other ports
         auth: {
         user: "djdjdjk2002@gmail.com", // generated ethereal user
-        pass: "adgjl30230@", // generated ethereal password
+        pass: "zebthvyweahonwln", // generated ethereal password
         },
     });
 
@@ -92,7 +92,7 @@ async function main(user_email2,randomPassword2) {
         html: 
         "<h1 >라즈베리에서 새로운 비밀번호를 알려드립니다.</h1> <h2> 비밀번호 : " + randomPassword2 + "</h2>"
         +'<h3 style="color: crimson;">임시 비밀번호로 로그인 하신 후, 반드시 비밀번호를 수정해 주세요.</h3>'
-        +'<img src="https://aurorafac.co.kr/img/raspberrylogo.png">'		
+        +'<img src="https://aurorafac.co.kr/img/raspberrylogo.png">'      
         ,
     });
     console.log("Message sent: %s", info.messageId);
@@ -218,7 +218,7 @@ async function main(user_email2,randomPassword2) {
 //         html: 
 //         "<h1 >라즈베리에서 새로운 비밀번호를 알려드립니다.</h1> <h2> 비밀번호 : " + randomPassword2 + "</h2>"
 //         +'<h3 style="color: crimson;">임시 비밀번호로 로그인 하신 후, 반드시 비밀번호를 수정해 주세요.</h3>'
-//         +'<img src="https://aurorafac.co.kr/img/raspberrylogo.png">'		
+//         +'<img src="https://aurorafac.co.kr/img/raspberrylogo.png">'      
 //         ,
 //     });
 
