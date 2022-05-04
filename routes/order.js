@@ -40,6 +40,7 @@ router.post('/ModifyOrderStatus', order.ModifyOrderStatus)
 
 //setwebhook
 router.post('/setwebhook', order.setwebhook)
+router.get('/mobile', order.mobile)
 
 //결제완료후 OrderResult 컴포넌트에서 조회 
 router.post('/displayOrderDetail', order.displayOrderDetail)
