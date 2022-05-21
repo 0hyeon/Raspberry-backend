@@ -80,12 +80,20 @@ exports.paymentUpdate = async(req, res) => {
 
         if (amount === amountToBePaid) { // 결제금액 일치. 결제 된 금액 === 결제 되어야 하는 금액
         //   await db.shop_orders.findByIdAndUpdate(merchant_uid, { $set: paymentData }); // DB에 결제 정보 저장
+            let user_merchant_uid = await db.shop_orders.findAll({ 
+                    raw: true,
+                    where: {
+                        od_id: paymentData.merchant_uid, 
+                    }
+                })
+            let [{product_it_id,stock,ordernum,product_option_id,od_tel,od_addr1,od_cart_price}] = user_merchant_uid
             
             switch (status) {
+                
                 case "ready": // 가상계좌 발급
                 // DB에 가상계좌 발급 정보 저장
-                    const { vbank_num, vbank_date, vbank_name } = paymentData;
-                    
+                console.log("paymentData : ",paymentData);
+                    const { vbank_num, vbank_date, vbank_name} = paymentData;
                     
                     await db.shop_orders.update({//유저 가상계좌정보 업데이트
                     vbank_num,
@@ -93,10 +101,25 @@ exports.paymentUpdate = async(req, res) => {
                     vbank_name
                     },{ 
                         where : { od_id:paymentData.merchant_uid } 
-                    })
+                    }).then(()=>{
+                            let company = '라즈베리베리'
+                            let tpl_code="TI_3624"
+                            let msg=`[${company}]
+입금계좌 안내
+□ 상품명: ${paymentData.name}
+□ 주문번호 : ${paymentData.od_id}
+□ 배송지 : ${paymentData.od_addr1}
+□ 결제금액 : ${od_cart_price}원
 
-                // 가상계좌 발급 안내 문자메시지 발송
-                    // SMS.send({ text: `가상계좌 발급이 성공되었습니다. 계좌 정보 ${vbank_num} ${vbank_date} ${vbank_name}`});
+□ 입금은행: ${vbank_name}
+□ 가상계좌번호: ${vbank_num}
+□ 입금기한: ${Unix_timestamp(vbank_date)}
+
+? have a good berry berry!! ?`;
+                            let subject="가상계좌"
+                            alimtalk(name, od_tel, msg, subject, tpl_code)
+                    })
+                    // 가상계좌 발급 안내 문자메시지 발송
                     res.send({ status: "vbankIssued", message: "가상계좌 발급 성공" });
 
                     break;
@@ -134,13 +157,7 @@ exports.paymentUpdate = async(req, res) => {
                     console.log("splitResult.length",splitResult.length);
                     // console.log("splitResult2.length",splitResult2.length);
 
-                    const user_merchant_uid = await db.shop_orders.findAll({ 
-                        raw: true,
-                        where: {
-                            od_id: merchant_uid, 
-                        }
-                    })
-                    const [{product_it_id,stock,ordernum,product_option_id,od_tel,od_addr1,od_cart_price}] = user_merchant_uid
+                
                     console.log('user_merchant_uid',user_merchant_uid);
                     console.log('product_it_id',product_it_id);
                     console.log('product_option_id',product_option_id);
@@ -260,16 +277,6 @@ exports.paymentUpdate = async(req, res) => {
         } else { // 결제금액 불일치. 위/변조 된 결제
             throw { status: "forgery", message: "위조된 결제시도" };
         }
-        
-
-            
-        // }).then((result)=>{
-        // // console.log("상품 생성결과 :",result);
-        //     res.send({
-        //         result
-        //     })
-        // })
-        
         
     } catch (error) {
         console.log(error);
@@ -504,6 +511,8 @@ exports.setwebhook = async(req,res) => {
     try {
         const { imp_uid, merchant_uid } = req.body; // req의 body에서 imp_uid, merchant_uid 추출
         // 액세스 토큰(access token) 발급 받기
+        console.log('imp_uid : ',imp_uid);
+        console.log('merchant_uid : ',merchant_uid);
         const getToken = await axios({
             url: "https://api.iamport.kr/users/getToken",
             method: "post", // POST method
@@ -526,30 +535,178 @@ exports.setwebhook = async(req,res) => {
         });
         
         const paymentData = getPaymentData.data.response; // 조회한 결제 정보
+        const user_merchant_uid = await db.shop_orders.findAll({ 
+            raw: true,
+            where: {
+                od_id: merchant_uid, 
+            }
+        })
+        const [{product_it_id,stock,ordernum,product_option_id,od_tel,od_addr1,od_cart_price}] = user_merchant_uid
         // DB에서 결제되어야 하는 금액 조회
-        const order = await db.shop_orders.findOne({where: {od_id:paymentData.merchant_uid} });
+        const order = await db.shop_orders.findOne({where: {od_id:merchant_uid} });
+        // console.log ("order : ",order );
         const amountToBePaid = Number(order.od_cart_price); // (아임포트서버쪽)결제 되어야 하는 금액 
         
         // 결제 검증하기
-        const { amount, status } = paymentData;
+        console.log("paymentData !!!!: ",paymentData);
+        const { vbank_num, vbank_date, vbank_name,name,buyer_addr,amount,status,pg_tid,custom_data } = paymentData;
         if (amount === amountToBePaid) { // 결제금액 일치. 결제 된 금액 === 결제 되어야 하는 금액
           switch (status) {
             case "ready": // 가상계좌 발급
               // DB에 가상계좌 발급 정보 저장
-                const { vbank_num, vbank_date, vbank_name } = paymentData;
+                
                 await db.shop_orders.update({//유저 가상계좌정보 업데이트
                     vbank_num,
                     vbank_date,
                     vbank_name
                 },{ 
                     where : { od_id:paymentData.merchant_uid } 
-                })
+                }).then(()=>{
+                    let company = '라즈베리베리'
+                    let tpl_code="TI_3624"
+                    let msg=`[${company}]
+입금계좌 안내
+□ 상품명: ${name}
+□ 주문번호 : ${merchant_uid}
+□ 배송지 : ${buyer_addr}
+□ 결제금액 : ${amount}원
+
+□ 입금은행: ${vbank_name}
+□ 가상계좌번호: ${vbank_num}
+
+□ 입금기한: ${Unix_timestamp(vbank_date)}
+
+? have a good berry berry!! ?`;
+                    let subject="가상계좌"
+                    alimtalk(paymentData.name, od_tel, msg, subject, tpl_code)
+            })
 
               // 가상계좌 발급 안내 문자메시지 발송
             //   SMS.send({ text: `가상계좌 발급이 성공되었습니다. 계좌 정보 ${vbank_num} ${vbank_date} ${vbank_name}`});
               res.send({ status: "vbankIssued", message: "가상계좌 발급 성공" });
               break;
             case "paid": // 결제 완료
+                await db.shop_orders.update({
+                    pg_tid
+                },{ 
+                    where : { od_id : paymentData.merchant_uid } 
+                })
+                await db.shop_orders.update({
+                    od_status:'결제완료',
+                },{ 
+                    where : { od_id:paymentData.merchant_uid } 
+                })
+                jsonObj = JSON.parse(custom_data);
+                    console.log("jsonObj : ",jsonObj);
+                    // console.log("jsonObj : ",jsonObj.desc);
+                    //{ name: '2' }
+                    
+                    const splitResult = jsonObj.name.split(',');
+                    // const splitResult2 = jsonObj.desc.split(',');
+                    console.log("splitResult : ",splitResult);//'2' , [ '1', '2' ]
+                    // console.log("splitResult2 : ",splitResult2);//'2' , [ '1', '2' ]
+
+                    console.log("splitResult.length",splitResult.length);
+                    // console.log("splitResult2.length",splitResult2.length);
+
+                
+                    console.log('user_merchant_uid',user_merchant_uid);
+                    console.log('product_it_id',product_it_id);
+                    console.log('product_option_id',product_option_id);
+                    console.log('stock',stock);
+                    console.log('ordernum',ordernum);
+
+                    const user_it_id = product_it_id.split(',');
+                    const user_stock = stock.split(',');
+                    const user_order = ordernum.split(',');
+                    const user_opt_id = product_option_id.split(',');
+                    for(i=0;i<splitResult.length; i++){//splitResult.length만큼 반복 product optionId만큼 (1,2)
+
+                        Number(splitResult[i])//option id 1,2
+
+                        //const [{ordernum,stock}] =user_merchant_uid// [{ordernum:'1,1'} , {stock:'1,1'}]
+                        console.log("user_it_id[i]",user_it_id[i]);
+                        console.log("ordernum[i]",ordernum[i]);
+                        console.log("stock[i]",stock[i]);
+                        console.log("user_opt_id[i]",user_opt_id[i]);
+
+                        await db.ProductOption.update({//해당제품의 옵션 재고업데이트 재고 : 기존재고 - 주문수량 // 두번째 오류 
+                            quantity1:Number(user_stock[i])-Number(user_order[i])//split으로 잘라서 넣어야 
+                        },{ 
+                            where : { id:splitResult[i] } //optionid 각각 1,2의 수량을  통과
+                        }).then(
+                            await db.shop_orders.update({//주문 테이블에 기존재고 리셋 
+                                stock:0
+                            },{ 
+                                where : { od_id : merchant_uid } 
+                            }),
+                            await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
+                                raw: true,
+                                where: {
+                                    id: user_opt_id[i], //productopt의 ID
+                                }
+                            }).then((result)=>{
+                                console.log("result!!!",result)
+                                console.log("result!!!",result.quantity1)
+                                const quantity1_result = result.map((item)=>item.quantity1)//ProductOption 재고
+                                console.log("quantity1_result",quantity1_result) // [0]
+                                const quantity1_result2 = [quantity1_result]
+
+                                if(quantity1_result2 <= 0){
+                                    db.ProductOption.update({
+                                        soldout:0
+                                    },{ 
+                                        where : { 
+                                            // name : name 
+                                            id : user_opt_id[i]//productopt의 ID
+                                        } 
+                                    })
+                                }
+                            }),
+                            await db.shop_cart.destroy({
+                                where: {
+                                    mb_id:order.mb_id,
+                                    it_id:user_it_id[i],
+                                    it_option_id:user_opt_id[i]
+                                }
+                            }),
+                            await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
+                                raw: true,
+                                where: {
+                                    product_id: user_it_id[i], //productopt의 ID
+                                }
+                            }).then((result)=>{
+                                console.log("result!!!",result)
+                                // console.log("result!!!",result.quantity1)
+                                const soldout_result = result.map((item)=>item.soldout)//ProductOption 재고
+                                console.log("soldout_result",soldout_result);
+                                const sum1 = soldout_result.reduce((accumulator, currentNumber) => accumulator + currentNumber,0);
+                                console.log("sum1",sum1)
+
+                                let company = '라즈베리베리'
+                                let tpl_code="TI_0937"
+                                let msg=`[${company}]
+구매가 성공적으로 완료되었습니다!
+□ 상품명: ${name}
+□ 주문번호 : ${merchant_uid}
+□ 배송지 : ${buyer_addr}
+□ 결제금액 : ${amount}원
+
+? have a good berry berry!! ?`;
+                                let subject="구매완료"
+                                alimtalk(paymentData.name, od_tel, msg, subject, tpl_code)
+                                if(sum1 == 0){
+                                    db.Product.update({
+                                        soldout:1
+                                    },{ 
+                                        where : { 
+                                            id : user_it_id[i] 
+                                        } 
+                                    })
+                                }
+                            })
+                        )
+                    }            
               res.send({ status: "success", message: "일반 결제 성공" });
               break;
           }
@@ -733,4 +890,14 @@ const send_alimtalk=(apikey,userid,token,senderkey,mb_name, mb_hp, msg, subject,
         })
         
     }
+}
+function Unix_timestamp(t){
+    var date = new Date(t*1000);
+    var year = date.getFullYear();
+    var month = "0" + (date.getMonth()+1);
+    var day = "0" + date.getDate();
+    var hour = "0" + date.getHours();
+    var minute = "0" + date.getMinutes();
+    var second = "0" + date.getSeconds();
+    return year + "-" + month.substr(-2) + "-" + day.substr(-2) + " " + hour.substr(-2) + ":" + minute.substr(-2) + ":" + second.substr(-2);
 }

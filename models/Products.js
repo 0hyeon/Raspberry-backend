@@ -8,6 +8,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER(20),
       allowNull: false,
     },
+    marketPrice: {
+      type: DataTypes.INTEGER(20),
+      allowNull: false,
+    },
     seller: {
       type: DataTypes.STRING(30),
       allowNull: false,
