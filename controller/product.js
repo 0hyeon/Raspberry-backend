@@ -6,7 +6,7 @@ exports.products = async(req,res) => {
     try {
         db.Product.findAll({//상품정보들 복수개를 조회할때는,
             order : [["createdAt","DESC"]],//불러오는 순서
-            attributes: ["id","name","price","marketPrice","description","subDescription","sizeDesc","createdAt","seller","color1","colorName1","size1","quantity1","imageUrl","imageUrl2","imageUrl3","imageUrl4","imageUrl5","detailPage1","detailPage2","detailPage3","detailPage4","detailPage5","relateProduct1","relateProduct2","relateProduct3","relateProduct4","relateProduct5","category","soldout"],//이정보들만 받겠다.    
+            attributes: ["id","name","price","marketPrice","description","subDescription","sizeDesc","createdAt","seller","color1","colorName1","size1","quantity1","imageUrl","imageUrl2","imageUrl3","imageUrl4","imageUrl5","detailPage1","detailPage2","detailPage3","detailPage4","detailPage5","relateProduct1","relateProduct2","relateProduct3","relateProduct4","relateProduct5","category","soldout","sellCount"],//이정보들만 받겠다.    
         }).then((result)=>{
             // console.log("PRODUCTS :",result);
             res.send({

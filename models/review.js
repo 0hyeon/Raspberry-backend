@@ -14,7 +14,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       thumbnail_image: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
       },
       description: {
       type: DataTypes.STRING(999),
