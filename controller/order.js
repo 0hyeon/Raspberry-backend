@@ -66,7 +66,7 @@ exports.paymentUpdate = async(req, res) => {
         });
         
         const paymentData = getPaymentData.data.response; // 아임포트 서버에서 조회한 결제 정보
-        console.log('paymentData!!!!!!!!!!!',paymentData);
+        // console.log('paymentData!!!!!!!!!!!',paymentData);
         //console.log('paymentData!!!!!!!!!!!',paymentData.name);
 
         // DB에서 결제되어야 하는 금액 조회
@@ -92,7 +92,7 @@ exports.paymentUpdate = async(req, res) => {
                 
                 case "ready": // 가상계좌 발급
                 // DB에 가상계좌 발급 정보 저장
-                console.log("paymentData : ",paymentData);
+                // console.log("paymentData : ",paymentData);
                     const { vbank_num, vbank_date, vbank_name} = paymentData;
                     
                     await db.shop_orders.update({//유저 가상계좌정보 업데이트
@@ -140,7 +140,7 @@ exports.paymentUpdate = async(req, res) => {
                     },{ 
                         where : { od_id:paymentData.merchant_uid } 
                     })
-                    console.log("custom_data!!!!!!!!!!!!!",custom_data);
+                    // console.log("custom_data!!!!!!!!!!!!!",custom_data);
                     //단일결제시 : {"name":"2"}
                     //다중결제시 : {"name":"1,2"}                    
 
@@ -177,6 +177,14 @@ exports.paymentUpdate = async(req, res) => {
                         console.log("ordernum[i]",ordernum[i]);
                         console.log("stock[i]",stock[i]);
                         console.log("user_opt_id[i]",user_opt_id[i]);
+
+                        const sellCountValue = user_it_id[i];
+                        const sellCountValueFind = await db.Product.findOne({where: {id:sellCountValue} })//sellcount값 가져오기 findOne
+                        const sellCountValue_Real = Number(sellCountValueFind.sellCount); //+1하기전 값가져옴
+
+                        console.log("sellCountValue : ",sellCountValue);
+                        console.log("sellCountValueFind : ",sellCountValueFind);
+                        console.log("sellCountValue_Real : ",sellCountValue_Real);
 
                         await db.ProductOption.update({//해당제품의 옵션 재고업데이트 재고 : 기존재고 - 주문수량 // 두번째 오류 
                             quantity1:Number(user_stock[i])-Number(user_order[i])//split으로 잘라서 넣어야 
@@ -218,13 +226,20 @@ exports.paymentUpdate = async(req, res) => {
                                     it_option_id:user_opt_id[i]
                                 }
                             }),
+                            await db.Product.update({
+                                sellCount:sellCountValue_Real+1
+                            },{ 
+                                where : { 
+                                    id : user_it_id[i] 
+                                } 
+                            }),
                             await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
                                 raw: true,
                                 where: {
                                     product_id: user_it_id[i], //productopt의 ID
                                 }
                             }).then((result)=>{
-                                console.log("result!!!",result)
+                                // console.log("result!!!",result)
                                 // console.log("result!!!",result.quantity1)
                                 const soldout_result = result.map((item)=>item.soldout)//ProductOption 재고
                                 console.log("soldout_result",soldout_result);
@@ -243,6 +258,7 @@ exports.paymentUpdate = async(req, res) => {
 ? have a good berry berry!! ?`;
                                 let subject="구매완료"
                                 alimtalk(name, od_tel, msg, subject, tpl_code)
+                                
                                 if(sum1 == 0){
                                     db.Product.update({
                                         soldout:1
@@ -629,6 +645,13 @@ exports.setwebhook = async(req,res) => {
                         console.log("ordernum[i]",ordernum[i]);
                         console.log("stock[i]",stock[i]);
                         console.log("user_opt_id[i]",user_opt_id[i]);
+                        const sellCountValue = user_it_id[i];
+                        const sellCountValueFind = await db.Product.findOne({where: {id:sellCountValue} })//sellcount값 가져오기 findOne
+                        const sellCountValue_Real = Number(sellCountValueFind.sellCount); //+1하기전 값가져옴
+
+                        console.log("sellCountValue : ",sellCountValue);
+                        console.log("sellCountValueFind : ",sellCountValueFind);
+                        console.log("sellCountValue_Real : ",sellCountValue_Real);
 
                         await db.ProductOption.update({//해당제품의 옵션 재고업데이트 재고 : 기존재고 - 주문수량 // 두번째 오류 
                             quantity1:Number(user_stock[i])-Number(user_order[i])//split으로 잘라서 넣어야 
@@ -669,6 +692,13 @@ exports.setwebhook = async(req,res) => {
                                     it_id:user_it_id[i],
                                     it_option_id:user_opt_id[i]
                                 }
+                            }),
+                            await db.Product.update({
+                                sellCount:sellCountValue_Real+1
+                            },{ 
+                                where : { 
+                                    id : user_it_id[i] 
+                                } 
                             }),
                             await db.ProductOption.findAll({ //결제한 제품의 ProductOption 전부 조회
                                 raw: true,

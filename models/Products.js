@@ -119,7 +119,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     sellCount : {
       type: DataTypes.INTEGER(20),
-      allowNull: false,
+      allowNull: true,
     }
   });
   //제품 모델 관계도 
