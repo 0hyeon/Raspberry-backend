@@ -28,6 +28,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    sizeDetail: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
     color1: {
       type : DataTypes.JSON,
       allowNull: true,

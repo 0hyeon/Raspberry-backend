@@ -95,8 +95,7 @@ exports.Updateproducts = async(req, res) => {
 
         // console.log(id);
         const body = req.body;
-        const {name, description,sizeDesc, price, seller, color1, colorName1, size1, quantity1, size1_2, quantity1_2, size1_3, quantity1_3, color2, colorName2, size2, quantity2, size2_2, quantity2_2, size2_3, quantity2_3, color3, colorName3, size3, quantity3, size3_2, quantity3_2, size3_3, quantity3_3, imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category,soldout} = body;
-        console.log("!!!!!soldout : ",soldout);
+        const {name, description,sizeDesc,sizeDetail, price, seller, color1, colorName1, size1, quantity1, size1_2, quantity1_2, size1_3, quantity1_3, color2, colorName2, size2, quantity2, size2_2, quantity2_2, size2_3, quantity2_3, color3, colorName3, size3, quantity3, size3_2, quantity3_2, size3_3, quantity3_3, imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category,soldout} = body;
         if({size1_2:size1_2} == undefined){
             size1_2 == null
         }
@@ -258,7 +257,7 @@ exports.Updateproducts = async(req, res) => {
 
         
         db.Product.update({
-            name,price,seller,description,sizeDesc,color1:colorPackage,colorName1:colorNamePackage,size1:SizePackage,quantity1:QuantityPackage,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category,soldout
+            name,price,seller,description,sizeDesc,sizeDetail,color1:colorPackage,colorName1:colorNamePackage,size1:SizePackage,quantity1:QuantityPackage,imageUrl, imageUrl2, imageUrl3, imageUrl4,imageUrl5, detailPage1, detailPage2,detailPage3,detailPage4,detailPage5,relateProduct1,relateProduct2,relateProduct3,relateProduct4,relateProduct5,category,soldout
         },{ 
             where : { id:id } 
         }).then((result)=>{

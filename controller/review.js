@@ -58,7 +58,7 @@ exports.reviewAll = async(req,res) => {
             order : [["createdAt","DESC"]],//불러오는 순서
             attributes: ["createdAt","id","thumbnail_image","title","description","user_id","user_name","createDate","response_result"],
         }).then((result)=>{
-            console.log(result);
+            // console.log(result);
             res.send({
                 result
             });  
