@@ -28,6 +28,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    sizeDetailCategory: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
     sizeDetail: {
       type: DataTypes.JSON,
       allowNull: true,
@@ -122,8 +126,9 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: 0,
     },
     sellCount : {
-      type: DataTypes.INTEGER(20),
+      type: DataTypes.STRING(300),
       allowNull: true,
+      defaultValue: 0,
     }
   });
   //제품 모델 관계도 
