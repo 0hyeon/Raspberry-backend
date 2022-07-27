@@ -18,9 +18,6 @@ dotenv.config(); //LOAD CONFIG
 // process.env.DB_USER, process.env.DB_PASSWORD,{
 //     host: process.env.DB_HOST,
 
-//test
-router.get('/' , (req,res) => { res.send('test'); })
-
 //회원가입
 router.post('/',login.signUp)
 

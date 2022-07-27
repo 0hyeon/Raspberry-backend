@@ -18,32 +18,41 @@ global.document = document;
 var $ = jQuery = require('jquery')(window);
 exports.signUp = async(req,res) => {
     try {
-        let tpl_code="TI_0549"
         const { user_id, user_email,user_name, user_pw, user_address,user_address_detail,user_address_postzone,user_phonenumber } = req.body;
-        let company = '라즈베리베리'
-        let msg=`[${company}]
-${user_name}(${user_id})님
+        
+        const user = await user_informs.findOne({ where: {'user_email':user_email}});
 
-${company}에 회원가입 감사합니다.`;
-        let subject="회원가입"
-
-        await bcrypt.hash(user_pw,10).then((hash)=>{
-            user_informs.create({
-                user_id:user_id,
-                user_pw: hash,
-                user_name: user_name,
-                user_email:user_email,
-                user_address:user_address,
-                user_address_postzone:user_address_postzone,
-                user_address_detail:user_address_detail,
-                user_phonenumber:user_phonenumber
-            });
-            
-        }).then(
-            
-            alimtalk(user_name, user_phonenumber, msg, subject, tpl_code)
-
-        )
+        if(user){
+            res.json({'msg':'duplicate'})
+            return;
+        }else{
+            let tpl_code="TI_0549"
+            let company = '라즈베리베리'
+            let msg=`[${company}]
+    ${user_name}(${user_id})님
+    
+    ${company}에 회원가입 감사합니다.`;
+            let subject="회원가입"
+    
+            await bcrypt.hash(user_pw,10).then((hash)=>{
+                user_informs.create({
+                    user_id:user_id,
+                    user_pw: hash,
+                    user_name: user_name,
+                    user_email:user_email,
+                    user_address:user_address,
+                    user_address_postzone:user_address_postzone,
+                    user_address_detail:user_address_detail,
+                    user_phonenumber:user_phonenumber
+                });
+                
+            }).then(
+                
+                alimtalk(user_name, user_phonenumber, msg, subject, tpl_code)
+    
+            )
+            res.json({'msg':'ok'})
+        }
        
         
     } catch (error) {
