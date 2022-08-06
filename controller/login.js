@@ -232,8 +232,8 @@ exports.idCheck = async (req, res) => {
 
     if(user_id == ''){
         res.json({'msg':'빈값'})
-    }else if(user_id.length < 2 || user_id.length > 10 ){    
-        res.json({'msg':'닉네임은 2글자 이상 10글자 미만 입력해주세요.'})
+    }else if(user_id.length < 2 || user_id.length > 13 ){    
+        res.json({'msg':'닉네임은 2글자 이상 13글자 미만 입력해주세요.'})
     }else if(user){
         res.json({'msg':'중복'})
     }else{
