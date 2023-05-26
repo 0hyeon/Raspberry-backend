@@ -12,6 +12,9 @@
     "start": "node server.js",
     "dev": "nodemon start server.js"
   },
+  "production": {
+    "use_env_variable": "DB_HOST"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
