@@ -14,7 +14,6 @@ var dotenv = require("dotenv");
 
 dotenv.config(); //LOAD CONFIG
 const env = process.env.DB_HOST;
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
